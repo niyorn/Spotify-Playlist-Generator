@@ -1,15 +1,44 @@
 <template>
   <section>
-    <h1>You're logged in</h1>
+    <h1>Hi, {{user.name}}</h1>
+
+    <ul v-for="track in topTracks" :key=track.key>
+      <li>
+        <a :href="track.href">
+          {{track.name}}
+        </a>
+      </li>
+    </ul>
   </section>
 </template>
 
 <script>
+  // import UserHeader from '@/components/UserHeader'
+
   export default {
+    components: {},
+
+
     computed: {
       getHash() {
         const hash = this.$route.hash
         return hash
+      },
+      user() {
+        return this.$store.getters.user
+      },
+      topTracks() {
+        let topTracks = this.$store.state.user.topTracks.items
+        if (topTracks != undefined) {
+          let transFormTracks = topTracks.map((i) => {
+            const track = {
+              name: i.name,
+              href: i.external_urls.spotify
+            }
+            return track
+          })
+          return transFormTracks
+        }
       }
     },
 
@@ -38,6 +67,8 @@
 
     created() {
       this.updateAccessToken()
+      this.$store.dispatch('fetchUser')
+      this.$store.dispatch('fetchUserTopTracks')
     }
   }
 

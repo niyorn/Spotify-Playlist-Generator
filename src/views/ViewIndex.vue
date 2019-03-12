@@ -9,11 +9,11 @@
 </template>
 
 <script>
-  import authorizeButton from '@/components/authorizeButton'
+  import AuthorizeButton from '@/components/AuthorizeButton'
 
   export default {
     components: {
-      authorizeButton
+      AuthorizeButton
     }
   }
 
