@@ -69,7 +69,7 @@ export default new Vuex.Store({
 
     user(state) {
       const user = {}
-      user.name = state.user.data.id
+      user.name = state.user.data.display_name
       return user
     },
 
