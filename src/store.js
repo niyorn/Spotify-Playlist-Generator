@@ -11,7 +11,7 @@ export default new Vuex.Store({
       authorizeUrl: 'https://accounts.spotify.com/authorize?',
       responseType: 'token',
       scope: 'user-top-read',
-      redirectUrl: 'http://localhost:8080/home',
+      redirectUrl: 'http://localhost:8080/check',
       showDialog: true
     },
     access: {
@@ -22,8 +22,10 @@ export default new Vuex.Store({
     user: {
       userUrl: 'https://api.spotify.com/v1/me',
       scopeTopTracks: '/top/tracks',
+      scopeTopArtists: '/top/artists',
       data: {},
-      topTracks: {}
+      topTracks: {},
+      topArtists: {}
     }
   },
 
@@ -36,11 +38,18 @@ export default new Vuex.Store({
     },
 
     updateUserData(state, payload) {
+      
       state.user.data = payload
     },
 
     updateUserTracks(state, payload) {
+      
       state.user.topTracks = payload
+    },
+
+    updateUserArtists(state, payload) {
+      
+      state.user.topArtists = payload
     }
   },
 
@@ -49,22 +58,53 @@ export default new Vuex.Store({
     getAuthorizeUrl(state) {
       const authorize = state.authorize
       let url = `${authorize.authorizeUrl}`
-      url+= `client_id=${authorize.clientId}`
-      url+= `&redirect_uri=${authorize.redirectUrl}`
-      url+= `&scope=${authorize.scope}`
-      url+= `&response_type=${authorize.responseType}`
-      url+= `&show_dialog=${authorize.showDialog}`
-      
+      url += `client_id=${authorize.clientId}`
+      url += `&redirect_uri=${authorize.redirectUrl}`
+      url += `&scope=${authorize.scope}`
+      url += `&response_type=${authorize.responseType}`
+      // url += `&show_dialog=${authorize.showDialog}`
+
       return url
     },
+
     user(state) {
       const user = {}
       user.name = state.user.data.id
       return user
     },
+
     topTracks(state) {
-      const tracks = state.user.topTracks.items
-      console.log('tracks: ', tracks);
+      let topTracks = state.user.topTracks.items
+      if (topTracks !== undefined) {
+        let transFormTracks = topTracks.map((i) => {
+          const track = {
+            name: i.name,
+            href: i.external_urls.spotify,
+            imageHref: i.album.images[0].url
+          }
+          return track
+        })
+
+        return transFormTracks
+      }
+    },
+
+    topArtists(state) {
+      const topArtists = state.user.topArtists.items
+      console.log('topArtists: ', topArtists);
+
+      if(topArtists !== undefined) {
+        let transformTopArtists = topArtists.map((i) => {
+          const artists = {
+            name: i.name,
+            href: i.external_urls.spotify,
+            imageHref: i.images[0].url
+          }
+          return artists
+        })
+
+        return transformTopArtists
+      }
     }
   },
 
@@ -72,45 +112,53 @@ export default new Vuex.Store({
 
   actions: {
     fetchUser(context) {
-      const url = context.state.user.userUrl 
+      const url = context.state.user.userUrl
       const data = context.dispatch('fetchSpotify', url)
-      data.then((data)=>{
+      data.then((data) => {
         context.commit('updateUserData', data)
       })
     },
 
     fetchUserTopTracks(context) {
-      const url = context.state.user.userUrl+context.state.user.scopeTopTracks 
+      const url = context.state.user.userUrl + context.state.user.scopeTopTracks
       const data = context.dispatch('fetchSpotify', url)
       data.then(data => {
         context.commit('updateUserTracks', data)
       })
     },
 
+    fetchUserTopArtists(context) {
+      const url = context.state.user.userUrl + context.state.user.scopeTopArtists
+      const data = context.dispatch('fetchSpotify', url)
+      data.then(data => {
+        context.commit('updateUserArtists', data)
+      })
+    },
+
     fetchSpotify(context, url) {
       let data = fetch(url, {
-        headers: {
-          'Authorization': `${context.state.access.tokenType} ${context.state.access.accessToken}`
-        }
-      })
-      .then(response=> {
-        return response.json()
-      })
-      
+          headers: {
+            'Authorization': `${context.state.access.tokenType} ${context.state.access.accessToken}`
+          }
+        })
+        .then(response => {
+          return response.json()
+        })
+
       return data
     },
 
-    getAccess({state}) {
+    getAccess({
+      state
+    }) {
       const authorize = state.authorize
       const url = `${authorize.authorizeUrl}client_id=${authorize.clientId}&redirect_uri=${authorize.redirectUrl}&scope=${authorize.scope}&response_type=${authorize.responseType}`
-
-      fetch(url)
-        .then(response => {
-          console.log(response)
-        })
     },
 
-    addAccess({commit}, access) {
+    addAccess({
+      commit
+    }, access) {
+      
       commit('updateAccess', access)
     }
   }
