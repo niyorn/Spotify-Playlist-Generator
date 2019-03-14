@@ -1,5 +1,7 @@
 <template>
   <section :class="$style.container">
+		<button @click="createPlaylist">Create playlist</button>
+
 		<article v-for="track in topTracks" :key="track.id">
 			<div>
 				<a :href="track.href" :class="$style.link" target="_blank">
@@ -18,7 +20,14 @@
         const tracks = this.$store.getters.topTracks
         return tracks
       }
-    }
+		},
+		
+		methods: {
+			createPlaylist() {
+				console.log('create')
+				this.$store.dispatch('createPlaylist')
+			}
+		}
   }
 
 </script>

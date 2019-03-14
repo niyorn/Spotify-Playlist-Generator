@@ -11,6 +11,8 @@ export default new Vuex.Store({
       authorizeUrl: 'https://accounts.spotify.com/authorize?',
       responseType: 'token',
       scope: 'user-top-read',
+      scopePlayListModifyPrivate: 'playlist-modify-private',
+      scopePlayListModifyPublic: 'playlist-modify-private',
       redirectUrl: 'http://localhost:8080/check',
       showDialog: true
     },
@@ -26,6 +28,9 @@ export default new Vuex.Store({
       data: {},
       topTracks: {},
       topArtists: {}
+    },
+    createPlay: {
+      data: {}
     }
   },
 
@@ -38,18 +43,19 @@ export default new Vuex.Store({
     },
 
     updateUserData(state, payload) {
-      
       state.user.data = payload
     },
 
     updateUserTracks(state, payload) {
-      
       state.user.topTracks = payload
     },
 
     updateUserArtists(state, payload) {
-      
       state.user.topArtists = payload
+    },
+
+    updateCreatePlaylist(state, payload) {
+      state.createPlay.data = payload
     }
   },
 
@@ -60,9 +66,9 @@ export default new Vuex.Store({
       let url = `${authorize.authorizeUrl}`
       url += `client_id=${authorize.clientId}`
       url += `&redirect_uri=${authorize.redirectUrl}`
-      url += `&scope=${authorize.scope}`
+      url += `&scope=${authorize.scope} ${authorize.scopePlayListPrivate}` 
       url += `&response_type=${authorize.responseType}`
-      // url += `&show_dialog=${authorize.showDialog}`
+      url += `&show_dialog=${authorize.showDialog}`
 
       return url
     },
@@ -93,7 +99,7 @@ export default new Vuex.Store({
       const topArtists = state.user.topArtists.items
       console.log('topArtists: ', topArtists);
 
-      if(topArtists !== undefined) {
+      if (topArtists !== undefined) {
         let transformTopArtists = topArtists.map((i) => {
           const artists = {
             name: i.name,
@@ -148,18 +154,43 @@ export default new Vuex.Store({
       return data
     },
 
-    getAccess({
-      state
-    }) {
+    getAccess({state}) {
       const authorize = state.authorize
       const url = `${authorize.authorizeUrl}client_id=${authorize.clientId}&redirect_uri=${authorize.redirectUrl}&scope=${authorize.scope}&response_type=${authorize.responseType}`
     },
 
-    addAccess({
-      commit
-    }, access) {
-      
+    addAccess({commit}, access) {
       commit('updateAccess', access)
+    },
+
+
+    createPlaylist(context) {
+      const userId = context.state.user.data.id
+      const  url= `https://api.spotify.com/v1/users/${userId}/playlists`
+      const playList = {
+        "name": "New Playlist",
+        "description": "New playlist description",
+      }
+      
+      const option = {
+        method: 'POST',
+        headers: {
+          "Content-Type": 'application/json',
+          "Authorization":`${context.state.access.tokenType} ${context.state.access.accessToken}` ,
+        },
+        body: JSON.stringify(playList),
+      }
+
+      fetch(url, option)
+      .then(response=> {
+        return response.json()
+      })
+      .then(data=> {
+        context.commit('updateCreatePlaylist', data)
+      })
+      .catch(error=>{
+        console.log('error: ', error);
+      })
     }
   }
 })
