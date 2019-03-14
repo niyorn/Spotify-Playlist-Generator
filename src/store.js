@@ -23,8 +23,9 @@ export default new Vuex.Store({
     },
     user: {
       userUrl: 'https://api.spotify.com/v1/me',
-      scopeTopTracks: '/top/tracks',
-      scopeTopArtists: '/top/artists',
+      scopeTopTracks: '/top/tracks?',
+      scopeTopArtists: '/top/artists?',
+      timeRange: 'short_term',
       data: {},
       topTracks: {},
       topArtists: {}
@@ -136,7 +137,10 @@ export default new Vuex.Store({
     },
 
     fetchUserTopTracks(context) {
-      const url = context.state.user.userUrl + context.state.user.scopeTopTracks
+      const timeRange = 'time_range=short_term'
+      const url = context.state.user.userUrl 
+        + context.state.user.scopeTopTracks 
+        + `time_range=${context.state.user.timeRange}`
       const data = context.dispatch('fetchSpotify', url)
       data.then(data => {
         context.commit('updateUserTracks', data)
