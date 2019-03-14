@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import AuthorizeButton from '@/components/AuthorizeButton'
+  import AuthorizeButton from '@/components/AuthorizeButton.vue'
 
   export default {
     components: {
