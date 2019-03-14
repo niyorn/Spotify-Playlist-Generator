@@ -12,7 +12,7 @@ export default new Vuex.Store({
       responseType: 'token',
       scope: 'user-top-read',
       scopePlayListModifyPrivate: 'playlist-modify-private',
-      scopePlayListModifyPublic: 'playlist-modify-private',
+      scopePlayListModifyPublic: 'playlist-modify-public',
       redirectUrl: 'http://localhost:8080/check',
       showDialog: true
     },
@@ -29,7 +29,7 @@ export default new Vuex.Store({
       topTracks: {},
       topArtists: {}
     },
-    createPlay: {
+    createPlaylist: {
       data: {}
     }
   },
@@ -55,7 +55,7 @@ export default new Vuex.Store({
     },
 
     updateCreatePlaylist(state, payload) {
-      state.createPlay.data = payload
+      state.createPlaylist.data = payload
     }
   },
 
@@ -66,7 +66,7 @@ export default new Vuex.Store({
       let url = `${authorize.authorizeUrl}`
       url += `client_id=${authorize.clientId}`
       url += `&redirect_uri=${authorize.redirectUrl}`
-      url += `&scope=${authorize.scope} ${authorize.scopePlayListPrivate}` 
+      url += `&scope=${authorize.scope} ${authorize.scopePlayListModifyPublic}` 
       url += `&response_type=${authorize.responseType}`
       url += `&show_dialog=${authorize.showDialog}`
 
@@ -97,7 +97,6 @@ export default new Vuex.Store({
 
     topArtists(state) {
       const topArtists = state.user.topArtists.items
-      console.log('topArtists: ', topArtists);
 
       if (topArtists !== undefined) {
         let transformTopArtists = topArtists.map((i) => {
@@ -111,6 +110,17 @@ export default new Vuex.Store({
 
         return transformTopArtists
       }
+    },
+    //spotify:track:1uIPtWQmmoTJ8u0EVq7I8r
+    getTrackUri(state) {
+      const tracks = state.user.topTracks.items
+      let trackUri = []
+
+      for(let track of tracks){
+        trackUri.push(track.uri)
+      }
+
+      return trackUri
     }
   },
 
@@ -163,7 +173,6 @@ export default new Vuex.Store({
       commit('updateAccess', access)
     },
 
-
     createPlaylist(context) {
       const userId = context.state.user.data.id
       const  url= `https://api.spotify.com/v1/users/${userId}/playlists`
@@ -187,10 +196,47 @@ export default new Vuex.Store({
       })
       .then(data=> {
         context.commit('updateCreatePlaylist', data)
+        console.log(data)
+        const playlistId = data.id
+        return playlistId
+      })
+      .then((id)=>{
+        context.dispatch('addSongToPlaylist',id)
       })
       .catch(error=>{
         console.log('error: ', error);
       })
-    }
+    },
+
+    addSongToPlaylist({state, commit, dispatch,getters}, playlistId) {
+      const userId = state.user.data.id
+      // const playListId = state.playlist.data.id
+      const tokenType = state.access.tokenType
+      const accessToken = state.access.accessToken
+      const trackUri = getters.getTrackUri
+      const track = {"uris": trackUri}
+      const url = `https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`
+      const options = {
+        method: 'Post',
+        headers: {
+          'Authorization': `${tokenType} ${accessToken}`
+        },
+        body: JSON.stringify(track)
+      }
+      fetch(url, options)
+      .then(response=> {
+        console.log(response)
+        response.json()
+      })
+      .then(data=> {
+        console.log(data)
+      })
+    },
+
+    // test(context) {
+    //   console.log(context)
+    //   let lol = context.getters.getTrackId
+    //   console.log('lol: ', lol);
+    // }
   }
 })
