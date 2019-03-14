@@ -4,16 +4,18 @@
     <p>With Spotify Music Generator you're able to generate a playlist from your most listened songs.</p>
     <p>To get your top songs, we need permission to acces your data.</p>
 
-    <AuthorizeButton/>
+    <a :href="authorizeUrl">Authorize</a>
   </section>
 </template>
 
 <script>
-  import AuthorizeButton from '@/components/AuthorizeButton.vue'
+  import {mapGetters} from 'vuex'
 
   export default {
-    components: {
-      AuthorizeButton
+    computed: {
+      ...mapGetters({
+        authorizeUrl: 'getAuthorizeUrl'
+      })
     }
   }
 
