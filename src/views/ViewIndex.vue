@@ -4,7 +4,7 @@
     <p>With Spotify Music Generator you're able to generate a playlist from your most listened songs.</p>
     <p>To get your top songs, we need permission to acces your data.</p>
 
-    <authorizeButton/>
+    <AuthorizeButton/>
   </section>
 </template>
 
