@@ -13,7 +13,7 @@ export default new Vuex.Store({
       scope: 'user-top-read',
       scopePlayListModifyPrivate: 'playlist-modify-private',
       scopePlayListModifyPublic: 'playlist-modify-public',
-      redirectUrl: 'http://localhost:8080/check',
+      redirectUrl: 'https://sporator.netlify.com/check',
       showDialog: true
     },
     access: {
@@ -87,7 +87,8 @@ export default new Vuex.Store({
           const track = {
             name: i.name,
             href: i.external_urls.spotify,
-            imageHref: i.album.images[0].url
+            imageHref: i.album.images[0].url,
+            id: i.id
           }
           return track
         })
