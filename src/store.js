@@ -13,7 +13,7 @@ export default new Vuex.Store({
       scope: 'user-top-read',
       scopePlayListModifyPrivate: 'playlist-modify-private',
       scopePlayListModifyPublic: 'playlist-modify-public',
-      redirectUrl: 'https://sporator.netlify.com/check',
+      redirectUrl: 'http://localhost:8080/check',
       showDialog: true
     },
     access: {
@@ -25,6 +25,7 @@ export default new Vuex.Store({
       userUrl: 'https://api.spotify.com/v1/me',
       scopeTopTracks: '/top/tracks?',
       scopeTopArtists: '/top/artists?',
+      trackRange: '40',
       timeRange: 'short_term',
       data: {},
       topTracks: {},
@@ -32,7 +33,21 @@ export default new Vuex.Store({
     },
     createPlaylist: {
       data: {}
-    }
+    },
+    month: [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December' 
+    ]
   },
 
 
@@ -118,11 +133,13 @@ export default new Vuex.Store({
       const tracks = state.user.topTracks.items
       let trackUri = []
 
-      for(let track of tracks){
-        trackUri.push(track.uri)
+      if(tracks !==undefined) {
+        for(let track of tracks){
+          trackUri.push(track.uri)
+        }
+  
+        return trackUri
       }
-
-      return trackUri
     }
   },
 
@@ -138,10 +155,11 @@ export default new Vuex.Store({
     },
 
     fetchUserTopTracks(context) {
-      const timeRange = 'time_range=short_term'
       const url = context.state.user.userUrl 
         + context.state.user.scopeTopTracks 
         + `time_range=${context.state.user.timeRange}`
+        + `&`
+        + `limit=${context.state.user.trackRange}`
       const data = context.dispatch('fetchSpotify', url)
       data.then(data => {
         context.commit('updateUserTracks', data)
@@ -149,7 +167,11 @@ export default new Vuex.Store({
     },
 
     fetchUserTopArtists(context) {
-      const url = context.state.user.userUrl + context.state.user.scopeTopArtists
+      const url = context.state.user.userUrl 
+        + context.state.user.scopeTopArtists
+        + `time_range=${context.state.user.timeRange}`
+        + `&`
+        + `limit=${context.state.user.trackRange}`
       const data = context.dispatch('fetchSpotify', url)
       data.then(data => {
         context.commit('updateUserArtists', data)
@@ -181,9 +203,12 @@ export default new Vuex.Store({
     createPlaylist(context) {
       const userId = context.state.user.data.id
       const  url= `https://api.spotify.com/v1/users/${userId}/playlists`
+      const date = new Date()
+      const month = context.state.month[date.getMonth()] 
+      const year = date.getFullYear()
       const playList = {
-        "name": "New Playlist",
-        "description": "New playlist description",
+        "name": `Top Tracks - ${month} ${year}`,
+        "description": "These are the top tracks that you've been listening to in the last 4 weeks.",
       }
       
       const option = {
