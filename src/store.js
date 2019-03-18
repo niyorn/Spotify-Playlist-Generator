@@ -25,12 +25,13 @@ export default new Vuex.Store({
       userUrl: 'https://api.spotify.com/v1/me',
       scopeTopTracks: '/top/tracks?',
       scopeTopArtists: '/top/artists?',
-      trackRange: '40',
+      trackRange: '30',
       timeRange: 'short_term',
       data: {},
       topTracks: {},
       topArtists: {}
     },
+    similarTracks: {},
     createPlaylist: {
       data: {}
     },
@@ -72,6 +73,10 @@ export default new Vuex.Store({
 
     updateCreatePlaylist(state, payload) {
       state.createPlaylist.data = payload
+    },
+
+    updateSimilarTracks(state, payload) {
+      state.similarTracks = payload
     }
   },
 
@@ -84,7 +89,7 @@ export default new Vuex.Store({
       url += `&redirect_uri=${authorize.redirectUrl}`
       url += `&scope=${authorize.scope} ${authorize.scopePlayListModifyPublic}` 
       url += `&response_type=${authorize.responseType}`
-      url += `&show_dialog=${authorize.showDialog}`
+      // url += `&show_dialog=${authorize.showDialog}`
 
       return url
     },
@@ -100,6 +105,24 @@ export default new Vuex.Store({
       if (topTracks !== undefined) {
         let transFormTracks = topTracks.map((i) => {
           const track = {
+            name: i.name,
+            href: i.external_urls.spotify,
+            imageHref: i.album.images[0].url,
+            id: i.id
+          }
+          return track
+        })
+
+        return transFormTracks
+      }
+    },
+
+    getSimilarTracks(state) {
+      const tracks = state.similarTracks.tracks;
+
+      if(tracks !== undefined) {
+        let transFormTracks = tracks.map((i)=> {
+          const track= {
             name: i.name,
             href: i.external_urls.spotify,
             imageHref: i.album.images[0].url,
@@ -140,6 +163,17 @@ export default new Vuex.Store({
   
         return trackUri
       }
+    },
+    getSimilarTrackUri(state) {
+      const tracks = state.similarTracks.tracks
+      let trackUri = []
+
+      if(tracks !==undefined) {
+        for(let track of tracks) {
+          trackUri.push(track.uri)
+        }
+      }
+      return trackUri
     }
   },
 
@@ -178,6 +212,30 @@ export default new Vuex.Store({
       })
     },
 
+    fetchSimilarTracks(context) {
+      const endpoint = 'https://api.spotify.com/v1/recommendations?'
+      const tracks = context.getters.topTracks;
+      const popularityRange = 50;
+      const trackRange = 30; //How many songs we will get back
+      const limit = 5; //The Spotify API allow 5 tracks as a maximum
+      let trackString = ''
+      
+      //Get the top 5 tracks and create a string from it
+      for(let i=0; i<limit; i++){
+        trackString+= `${tracks[0].id},`
+      }
+
+      const url = `${endpoint}seed_tracks=${trackString}&limit=${trackRange}&min_popularity=${popularityRange}`
+
+      const data = context.dispatch('fetchSpotify', url)
+      data.then(data=>{
+        context.commit('updateSimilarTracks', data)
+      })
+
+      return true
+      
+    },
+
     fetchSpotify(context, url) {
       let data = fetch(url, {
           headers: {
@@ -200,16 +258,9 @@ export default new Vuex.Store({
       commit('updateAccess', access)
     },
 
-    createPlaylist(context) {
+    createPlaylist(context, {metaData, tracks}) {
       const userId = context.state.user.data.id
       const  url= `https://api.spotify.com/v1/users/${userId}/playlists`
-      const date = new Date()
-      const month = context.state.month[date.getMonth()] 
-      const year = date.getFullYear()
-      const playList = {
-        "name": `Top Tracks - ${month} ${year}`,
-        "description": "These are the top tracks that you've been listening to in the last 4 weeks.",
-      }
       
       const option = {
         method: 'POST',
@@ -217,7 +268,7 @@ export default new Vuex.Store({
           "Content-Type": 'application/json',
           "Authorization":`${context.state.access.tokenType} ${context.state.access.accessToken}` ,
         },
-        body: JSON.stringify(playList),
+        body: JSON.stringify(metaData),
       }
 
       fetch(url, option)
@@ -226,26 +277,66 @@ export default new Vuex.Store({
       })
       .then(data=> {
         context.commit('updateCreatePlaylist', data)
-        console.log(data)
         const playlistId = data.id
         return playlistId
       })
       .then((id)=>{
-        context.dispatch('addSongToPlaylist',id)
+        const data = {
+          'playListId': id,
+          'tracks': tracks
+        }
+        context.dispatch('addSongToPlaylist', data)
       })
       .catch(error=>{
         console.log('error: ', error);
       })
     },
 
-    addSongToPlaylist({state, commit, dispatch,getters}, playlistId) {
+    createTopPlaylist(context) {
+      const date = new Date()
+      const month = context.state.month[date.getMonth()] 
+      const year = date.getFullYear()
+
+      const metaData = {
+        "name": `Top Tracks - ${month} ${year}`,
+        "description": "These are the top tracks that you've been listening to in the last 4 weeks.",
+      }
+      const tracks = context.getters.getTrackUri
+      const data= {
+        "metaData": metaData,
+        "tracks": tracks
+      }
+      context.dispatch('createPlaylist', data)
+    },
+
+    createSimilarPlaylist(context, tracks) {
+      console.log('tracks: ', tracks);
+
+      const date = new Date()
+      const month = context.state.month[date.getMonth()] 
+      const year = date.getFullYear()
+      const metaData = {
+        "name": `Similar Tracks - ${month} ${year}`,
+        "description": "These are the tracks that are similar to what you're listening to.",
+      }
+
+      const data = {
+        'metaData': metaData,
+        'tracks': tracks
+      }
+
+      context.dispatch('createPlaylist', data)
+    },
+
+    addSongToPlaylist({state, commit, dispatch,getters}, {playListId, tracks}) {
+      console.log('tracks: ', tracks);
       const userId = state.user.data.id
       // const playListId = state.playlist.data.id
       const tokenType = state.access.tokenType
       const accessToken = state.access.accessToken
       const trackUri = getters.getTrackUri
-      const track = {"uris": trackUri}
-      const url = `https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`
+      const track = {"uris": tracks}
+      const url = `https://api.spotify.com/v1/users/${userId}/playlists/${playListId}/tracks`
       const options = {
         method: 'Post',
         headers: {
@@ -255,18 +346,11 @@ export default new Vuex.Store({
       }
       fetch(url, options)
       .then(response=> {
-        console.log(response)
         response.json()
       })
       .then(data=> {
         console.log(data)
       })
-    },
-
-    // test(context) {
-    //   console.log(context)
-    //   let lol = context.getters.getTrackId
-    //   console.log('lol: ', lol);
-    // }
+    }
   }
 })

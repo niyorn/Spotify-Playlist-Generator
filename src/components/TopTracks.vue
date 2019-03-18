@@ -7,7 +7,7 @@
       </section>
       <section class="container-create-playlist">
         <button @click="createPlaylist" class="button-create-playlist">Create playlist</button>
-        <button @click="test" class="button-create-playlist">test</button>
+        <button @click="createSimilarPlaylist" class="button-create-playlist">Create similar style playlist</button>
       </section>
     </section>
     <transition-group name="list" tag="section" class="track-container">
@@ -29,19 +29,31 @@
       topTracks() {
         const tracks = this.$store.getters.topTracks
         return tracks
-      }
-    },
+			},
+			
+			similarTracks: function() {
+				return this.$store.getters.getSimilarTrackUri
+			}
+		},
+
+		watch: {
+			similarTracks: function(e) {
+				const data = e;
+				this.$store.dispatch('createSimilarPlaylist', data)
+			}
+		},
 
     methods: {
       createPlaylist() {
-        console.log('create')
-        this.$store.dispatch('createPlaylist')
+				console.log('create')
+        this.$store.dispatch('createTopPlaylist')
       },
 
-      test() {
-        this.$store.dispatch('test')
+      createSimilarPlaylist() {
+				console.log('createSimilarTracks')
+				this.$store.dispatch('fetchSimilarTracks')
       }
-    }
+    },
   }
 </script>
 
