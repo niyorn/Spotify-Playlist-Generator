@@ -1,8 +1,5 @@
 # Spotify-Playlist-Generator
-
-<video controls autoplay="true">
-    <source src="./readme_assets/week1-demo.mp4" type="video/mp4">
-</video>
+![Demo of week 1](./readme_assets/week1-demo.gif)
 
 ## Project setup
 ```
