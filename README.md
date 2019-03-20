@@ -1,5 +1,9 @@
 # Spotify-Playlist-Generator
 
+<video controls autoplay="true">
+    <source src="./readme_assets/week1-demo.mp4" type="video/mp4">
+</video>
+
 ## Project setup
 ```
 npm install
