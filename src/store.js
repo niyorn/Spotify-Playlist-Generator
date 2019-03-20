@@ -230,10 +230,19 @@ export default new Vuex.Store({
       const data = context.dispatch('fetchSpotify', url)
       data.then(data=>{
         context.commit('updateSimilarTracks', data)
-      })
+      })  
+    },
 
-      return true
+    fetchSimilarTrack(context, {id}) {
+      const endpoint = 'https://api.spotify.com/v1/recommendations?'
+      const popularityRange = 50;
+      const trackRange = 30; //How many songs we will get back
+      let trackString = id
       
+      const url = `${endpoint}seed_tracks=${trackString}&limit=${trackRange}&min_popularity=${popularityRange}`
+
+      const data = context.dispatch('fetchSpotify', url) 
+      return data
     },
 
     fetchSpotify(context, url) {
@@ -245,7 +254,6 @@ export default new Vuex.Store({
         .then(response => {
           return response.json()
         })
-
       return data
     },
 
@@ -256,40 +264,6 @@ export default new Vuex.Store({
 
     addAccess({commit}, access) {
       commit('updateAccess', access)
-    },
-
-    createPlaylist(context, {metaData, tracks}) {
-      const userId = context.state.user.data.id
-      const  url= `https://api.spotify.com/v1/users/${userId}/playlists`
-      
-      const option = {
-        method: 'POST',
-        headers: {
-          "Content-Type": 'application/json',
-          "Authorization":`${context.state.access.tokenType} ${context.state.access.accessToken}` ,
-        },
-        body: JSON.stringify(metaData),
-      }
-
-      fetch(url, option)
-      .then(response=> {
-        return response.json()
-      })
-      .then(data=> {
-        context.commit('updateCreatePlaylist', data)
-        const playlistId = data.id
-        return playlistId
-      })
-      .then((id)=>{
-        const data = {
-          'playListId': id,
-          'tracks': tracks
-        }
-        context.dispatch('addSongToPlaylist', data)
-      })
-      .catch(error=>{
-        console.log('error: ', error);
-      })
     },
 
     createTopPlaylist(context) {
@@ -328,6 +302,60 @@ export default new Vuex.Store({
       context.dispatch('createPlaylist', data)
     },
 
+    createSimilarTrackPlaylist(context, {id, name}) {
+      const metaData = {
+        "name": `Tracks similar to ${name}`,
+        "description": `This is generate playlist with tracks that are similar to ${name}`,
+      }
+
+      const tracks = context.dispatch('fetchSimilarTrack', {id})
+      tracks.then(result=>{
+        const tracksUri = result.tracks.map((i)=>{
+          return i.uri
+        })
+
+        const data = {
+          'metaData': metaData,
+          'tracks': tracksUri
+        }
+        context.dispatch('createPlaylist', data)
+      })
+    },
+
+    createPlaylist(context, {metaData, tracks}) {
+      const userId = context.state.user.data.id
+      const  url= `https://api.spotify.com/v1/users/${userId}/playlists`
+      
+      const option = {
+        method: 'POST',
+        headers: {
+          "Content-Type": 'application/json',
+          "Authorization":`${context.state.access.tokenType} ${context.state.access.accessToken}` ,
+        },
+        body: JSON.stringify(metaData),
+      }
+
+      fetch(url, option)
+      .then(response=> {
+        return response.json()
+      })
+      .then(data=> {
+        context.commit('updateCreatePlaylist', data)
+        const playlistId = data.id
+        return playlistId
+      })
+      .then((id)=>{
+        const data = {
+          'playListId': id,
+          'tracks': tracks
+        }
+        context.dispatch('addSongToPlaylist', data)
+      })
+      .catch(error=>{
+        console.log('error: ', error);
+      })
+    },
+
     addSongToPlaylist({state, commit, dispatch,getters}, {playListId, tracks}) {
       console.log('tracks: ', tracks);
       const userId = state.user.data.id
@@ -348,9 +376,10 @@ export default new Vuex.Store({
       .then(response=> {
         response.json()
       })
-      .then(data=> {
-        console.log(data)
+      .catch(error =>{
+        console.log(error)
       })
+
     }
   }
 })

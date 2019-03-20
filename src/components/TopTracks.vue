@@ -14,9 +14,11 @@
       <article v-for="track in topTracks" :key="track.id">
         <div>
           <a :href="track.href" class="link" target="_blank">
-            <img :src="track.imageHref" class="image" :alt="track.name">
             <span class="title">{{track.name}}</span>
+            <img :src="track.imageHref" class="image" :alt="track.name">
           </a>
+
+          <button @click="createSimilarTrackPlaylist" :id="track.id" :name="track.name">Create playlist</button>
         </div>
       </article>
     </transition-group>
@@ -52,6 +54,15 @@
       createSimilarPlaylist() {
 				console.log('createSimilarTracks')
 				this.$store.dispatch('fetchSimilarTracks')
+      },
+
+      createSimilarTrackPlaylist(e) {
+        const track = {
+          id: e.target.id,
+          name: e.target.name
+        }
+        
+        this.$store.dispatch('createSimilarTrackPlaylist', track)
       }
     },
   }
