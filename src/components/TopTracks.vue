@@ -2,7 +2,7 @@
   <section class="container">
     <section class="container-intro">
       <section>
-        <h1 class="title">Top tracks</h1>
+        <h1 class="title"><span>Top</span> <span>Tracks</span></h1>
         <p class="description">These are you top tracks from the last 4 weeks</p>
       </section>
       <section class="container-create-playlist">
@@ -14,8 +14,16 @@
       <article v-for="track in topTracks" :key="track.id">
         <div>
           <a :href="track.href" class="link" target="_blank">
-            <span class="title">{{track.name}}</span>
             <img :src="track.imageHref" class="image" :alt="track.name">
+            <span class="meta-data title">{{track.name}}</span>
+            <p>
+            <span 
+              v-for="artist in track.artists" 
+              :key="artist.id"
+              class="meta-data artists">
+              {{artist.name}}
+            </span>
+            </p>
           </a>
 
           <button @click="createSimilarTrackPlaylist" :id="track.id" :name="track.name">Create playlist</button>
@@ -80,6 +88,7 @@
       display: flex;
       flex-direction: column;
       text-decoration: none;
+      color: black;
 
       .image {
         width: 100%;
@@ -91,10 +100,13 @@
       }
 
       .title {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         margin-top: 1rem;
         color: black;
-        text-align: left;
+      }
+
+      .artists {
+        color: rgb(73, 73, 73);
       }
 
 			&:hover img {

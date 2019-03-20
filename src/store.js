@@ -108,7 +108,8 @@ export default new Vuex.Store({
             name: i.name,
             href: i.external_urls.spotify,
             imageHref: i.album.images[0].url,
-            id: i.id
+            id: i.id,
+            artists: i.artists
           }
           return track
         })
@@ -126,7 +127,7 @@ export default new Vuex.Store({
             name: i.name,
             href: i.external_urls.spotify,
             imageHref: i.album.images[0].url,
-            id: i.id
+            id: i.id,
           }
           return track
         })
