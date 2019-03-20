@@ -13,7 +13,7 @@ export default new Vuex.Store({
       scope: 'user-top-read',
       scopePlayListModifyPrivate: 'playlist-modify-private',
       scopePlayListModifyPublic: 'playlist-modify-public',
-      redirectUrl: 'http://localhost:8080/check',
+      redirectUrl: 'https://sporator.netlify.com/check',
       showDialog: true
     },
     access: {
