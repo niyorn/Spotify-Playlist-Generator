@@ -1,15 +1,10 @@
 <template>
   <section class="container">
-    <section class="container-intro">
-      <section>
-        <h1 class="title"><span>Top</span> <span>Tracks</span></h1>
-        <p class="description">These are you top tracks from the last 4 weeks</p>
-      </section>
-      <section class="container-create-playlist">
-        <button @click="createPlaylist" class="button-create-playlist">Create playlist</button>
-        <button @click="createSimilarPlaylist" class="button-create-playlist">Create similar style playlist</button>
-      </section>
-    </section>
+    <ContainerIntro
+      title="Top Tracks"
+      @createPlaylist="createPlaylist" 
+      @createSimilarPlaylist="createSimilarPlaylist"
+    />
     <transition-group name="list" tag="section" class="track-container">
       <article v-for="track in topTracks" :key="track.id">
         <div>
@@ -34,7 +29,13 @@
 </template>
 
 <script>
+  import ContainerIntro from '@/components/ContainerIntro.vue'
+
   export default {
+    components: {
+      ContainerIntro
+    },
+
     computed: {
       topTracks() {
         const tracks = this.$store.getters.topTracks
@@ -115,40 +116,7 @@
     }
   }
 
-  .container-create-playlist {
-    padding: 1rem 0;
-
-    .button-create-playlist {
-      padding: 1rem;
-      margin: 0 1rem;
-			margin-left: 0;
-			background-color: #88fff5;
-			border: solid #88fff5 0.1rem;
-			transition: transform 0.4s;
-
-			&:hover {
-				cursor: pointer;
-				transform: scale(1.02);
-			}
-    }
-  }
-
-
-	.container-intro {
-		text-align: left;
-		padding-left: 2rem;
-
-		.title {
-			font-size: 6rem;
-		}
-
-		.description {
-			font-size: 2rem;
-		}
-	}
-
-
-
+  //Animation
   .list {
     transition: all 2s;
   }

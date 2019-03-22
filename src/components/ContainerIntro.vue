@@ -1,0 +1,56 @@
+<template>
+  <section class="container-intro">
+    <section>
+      <h1 class="title">{{title}}</h1>
+      <p class="description">These are you {{title}} from the last 4 weeks</p>
+    </section>
+    <section class="container-create-playlist">
+      <button @click="$emit('createPlaylist')" class="button-create-playlist">Create playlist</button>
+      <button @click="$emit('createSimilarPlaylist')" class="button-create-playlist">Create similar style playlist</button>
+    </section>
+  </section>
+</template>
+
+<script>
+  export default {
+		props: {
+			title: {
+				type: String,
+				required: true
+			}
+		}
+  }
+</script>
+
+<style scoped lang="scss">
+  .container-intro {
+    text-align: left;
+    padding-left: 2rem;
+
+    .title {
+      font-size: 6rem;
+    }
+
+    .description {
+      font-size: 2rem;
+    }
+
+    .container-create-playlist {
+      padding: 1rem 0;
+
+      .button-create-playlist {
+        padding: 1rem;
+        margin: 0 1rem;
+        margin-left: 0;
+        background-color: #88fff5;
+        border: solid #88fff5 0.1rem;
+        transition: transform 0.4s;
+
+        &:hover {
+          cursor: pointer;
+          transform: scale(1.02);
+        }
+      }
+    }
+  }
+</style>

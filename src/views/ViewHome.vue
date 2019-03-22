@@ -43,6 +43,7 @@
     grid-area: menu;
     background-color: #060625;
     height: 100vh;
+    text-align: center;
 
     .container-user {
       margin-top: 1.4rem;
