@@ -333,7 +333,24 @@ export default new Vuex.Store({
       })
     },
 
-    async createTopArtistPlaylist(context) {
+    async createArtistTopTracksPlayList(context, {id, name}) {
+      const metaData = {
+        "name": `Top tracks of: ${name}`,
+        "description": `These are the top tracks of ${name}`
+      }
+
+      const tracks = await context.dispatch('fetchArtistTopTrack', id)
+      const tracksUri = tracks.tracks.map((i)=>i.uri)
+
+      const data = {
+        'metaData': metaData,
+        'tracks': tracksUri
+      }
+
+      context.dispatch('createPlaylist', data)
+    },
+
+    async createAllTopArtistPlaylist(context) {
       const metaData = {
         "name": "Your top Artist",
         "description": "These are the songs from your top Artists"

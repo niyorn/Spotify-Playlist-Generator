@@ -3,6 +3,7 @@
 		<ContainerIntro
 			title="Top Artist"
 			@createPlaylist="createPlaylist"
+			@createSimilarPlaylist="createSimilarPlaylist"
 		/>
 
 		<section class="container-top-artist">
@@ -11,12 +12,13 @@
 				:key=artist.id
     	>
 				<div>
-					<a :href="artist.href" class="link">
+					<a :href="artist.href" class="link" target="_blank">
 						<img :src="artist.imageHref" :alt="artist.name" class="image">
 						<span class="name">{{artist.name}}</span>
 					</a>
+					<button @click="createArtistPlaylist" :data-artist-name="artist.name" :data-artist-id="artist.id" type="button">Create playlist</button>
 				</div>
-    </article>
+    	</article>
 		</section>
   </section>
 </template>
@@ -38,7 +40,20 @@
 		
 		methods: {
 			createPlaylist() {
-				this.$store.dispatch('createTopArtistPlaylist')
+				this.$store.dispatch('createAllTopArtistPlaylist')
+			},
+
+			createSimilarPlaylist() {
+				console.log('similar')
+			},
+
+			createArtistPlaylist(event) {
+				const artist = {
+					id: event.target.dataset.artistId,
+					name: event.target.dataset.artistName
+				}
+
+				this.$store.dispatch('createArtistTopTracksPlayList', artist)
 			}
 		}
   }
