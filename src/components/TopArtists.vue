@@ -44,7 +44,7 @@
 			},
 
 			createSimilarPlaylist() {
-				console.log('similar')
+				this.$store.dispatch('createSimilarArtistPlaylist')
 			},
 
 			createArtistPlaylist(event) {

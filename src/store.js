@@ -180,7 +180,6 @@ export default new Vuex.Store({
   },
 
 
-
   actions: {
     fetchUser(context) {
       const url = context.state.user.userUrl
@@ -255,6 +254,26 @@ export default new Vuex.Store({
       let tracks = context.dispatch('fetchSpotify', url)
       return tracks
     },
+
+    async fetchSimilarArtistTracks(context) {
+      const endpoint = 'https://api.spotify.com/v1/recommendations?'
+      const artists = context.getters.topArtists;
+      const popularityRange = 50;
+      const trackRange = 30; //How many songs we will get back
+      const limit = 5; //The Spotify API allow 5 tracks as a maximum
+      
+      //Get the top 5 artist and create a string from it to use it for the query
+      let artistString = ''
+      for(let i=0; i<limit; i++){
+        artistString+= `${artists[i].id},`
+      }
+
+      const url = `${endpoint}seed_artists=${artistString}&limit=${trackRange}&min_popularity=${popularityRange}`
+      const data = await context.dispatch('fetchSpotify', url)
+      const tracks = data.tracks
+
+      return tracks
+    },  
 
     fetchSpotify(context, url) {
       let data = fetch(url, {
@@ -372,6 +391,23 @@ export default new Vuex.Store({
       const trackUri = await topArtistTracks.map((i)=> {
         return i.uri
       })
+
+      const data = {
+        'metaData': metaData,
+        'tracks': trackUri
+      }
+
+      context.dispatch('createPlaylist', data)
+    },
+
+    async createSimilarArtistPlaylist(context) {
+      const similarTracks = await context.dispatch('fetchSimilarArtistTracks')
+      const trackUri = similarTracks.map((i)=>i.uri)
+      
+      const metaData = {
+        "name": `Tracks similar to your Top Artists`,
+        "description": "These are the tracks that are similar to your top Artists tracks",
+      }
 
       const data = {
         'metaData': metaData,
