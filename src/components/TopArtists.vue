@@ -2,6 +2,7 @@
   <section class="container">
 		<ContainerIntro
 			title="Top Artist"
+			@createPlaylist="createPlaylist"
 		/>
 
 		<section class="container-top-artist">
@@ -33,7 +34,13 @@
         const artists = this.$store.getters.topArtists
         return artists
       }
-    }
+		},
+		
+		methods: {
+			createPlaylist() {
+				this.$store.dispatch('createTopArtistPlaylist')
+			}
+		}
   }
 
 </script>

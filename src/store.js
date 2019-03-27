@@ -13,7 +13,7 @@ export default new Vuex.Store({
       scope: 'user-top-read',
       scopePlayListModifyPrivate: 'playlist-modify-private',
       scopePlayListModifyPublic: 'playlist-modify-public',
-      redirectUrl: 'https://sporator.netlify.com/check',
+      redirectUrl: 'http://localhost:8080/check', //Change to: https://sporator.netlify.com/check if deployed
       showDialog: true
     },
     access: {
@@ -144,7 +144,8 @@ export default new Vuex.Store({
           const artists = {
             name: i.name,
             href: i.external_urls.spotify,
-            imageHref: i.images[0].url
+            imageHref: i.images[0].url,
+            id: i.id
           }
           return artists
         })
@@ -246,6 +247,15 @@ export default new Vuex.Store({
       return data
     },
 
+    fetchArtistTopTrack(context, id) {
+      const endpoint = "https://api.spotify.com/v1/artists/"
+      const country = 'country=from_token'
+      const url = `${endpoint}${id}/top-tracks?${country}`
+
+      let tracks = context.dispatch('fetchSpotify', url)
+      return tracks
+    },
+
     fetchSpotify(context, url) {
       let data = fetch(url, {
           headers: {
@@ -285,7 +295,7 @@ export default new Vuex.Store({
     },
 
     createSimilarPlaylist(context, tracks) {
-      console.log('tracks: ', tracks);
+      
 
       const date = new Date()
       const month = context.state.month[date.getMonth()] 
@@ -323,6 +333,37 @@ export default new Vuex.Store({
       })
     },
 
+    async createTopArtistPlaylist(context) {
+      const metaData = {
+        "name": "Your top Artist",
+        "description": "These are the songs from your top Artists"
+      }
+
+      const artistId = await context.getters.topArtists.map(i=>{
+        return i.id
+      })
+
+      //Get the number one top track from the given artist
+      const topArtistTracks = []
+      for(const id of artistId) {
+        const tracks = await context.dispatch('fetchArtistTopTrack', id)
+        const topTrack = tracks.tracks[0]
+        topArtistTracks.push(topTrack)
+      }
+
+
+      const trackUri = await topArtistTracks.map((i)=> {
+        return i.uri
+      })
+
+      const data = {
+        'metaData': metaData,
+        'tracks': trackUri
+      }
+
+      context.dispatch('createPlaylist', data)
+    },
+
     createPlaylist(context, {metaData, tracks}) {
       const userId = context.state.user.data.id
       const  url= `https://api.spotify.com/v1/users/${userId}/playlists`
@@ -353,12 +394,12 @@ export default new Vuex.Store({
         context.dispatch('addSongToPlaylist', data)
       })
       .catch(error=>{
-        console.log('error: ', error);
+        
       })
     },
 
     addSongToPlaylist({state, commit, dispatch,getters}, {playListId, tracks}) {
-      console.log('tracks: ', tracks);
+      
       const userId = state.user.data.id
       // const playListId = state.playlist.data.id
       const tokenType = state.access.tokenType
@@ -375,6 +416,7 @@ export default new Vuex.Store({
       }
       fetch(url, options)
       .then(response=> {
+        console.log('response: ', response);
         response.json()
       })
       .catch(error =>{
