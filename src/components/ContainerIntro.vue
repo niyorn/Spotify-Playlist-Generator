@@ -71,11 +71,11 @@
         margin-left: 0;
         background-color: #88fff5;
         border: solid #88fff5 0.1rem;
-        transition: transform 0.4s;
+        transition: all 0.4s ease-out;
 
-        &:hover {
+        &:hover, &:focus {
           cursor: pointer;
-          transform: scale(1.02);
+          box-shadow: 0 19px 38px rgba(0,0,0,0.2), 0 15px 12px rgba(0,0,0,0.1);
         }
       }
     }

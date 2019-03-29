@@ -18,7 +18,7 @@
             </p>
           </a>
 
-          <button @click="createSimilarTrackPlaylist" :id="track.id" :name="track.name">Create playlist</button>
+          <button @click="createSimilarTrackPlaylist" :id="track.id" :name="track.name" class="button">Create playlist</button>
         </div>
       </article>
     </section>
@@ -147,5 +147,18 @@
 			transform: scale(1.02);
 			}
     }
+
+    		.button {
+			margin-top: 1rem;
+			padding: 0.7rem;
+			border: none;
+			background-color: #88fff5;
+			transition: all 0.4s ease-out;
+
+			&:hover, &:focus {
+				cursor: pointer;
+        box-shadow: 0 19px 38px rgba(0,0,0,0.2), 0 15px 12px rgba(0,0,0,0.1);
+			}
+		}
   }
 </style>
