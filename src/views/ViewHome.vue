@@ -9,20 +9,17 @@
         <router-link :to="{name:'Artists'}" class="button">Top Artists</router-link>
       </section>
     </aside>
+
+    <transition name=content>
     <router-view class="content"></router-view>
+    </transition>
   </section>
 </template>
 
 <script>
   import TopTracks from '@/components/TopTracks'
 
-
   export default {
-    components: {
-      TopTracks
-    },
-
-
     computed: {
       user() {
         return this.$store.getters.user
@@ -103,6 +100,16 @@
     grid-area: content;
     height: 100vh;
     overflow: auto;
+    position: relative;
   }
+
+  .content-enter-active {
+    transition: opacity 0.4s ease-out;
+  }
+  .content-enter {
+    opacity: 0.7;
+  }
+
+
 </style>
 

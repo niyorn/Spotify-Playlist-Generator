@@ -1,42 +1,56 @@
 <template>
   <section class="container">
-    <ContainerIntro
-      title="Top Tracks"
-      @createPlaylist="createPlaylist" 
-      @createSimilarPlaylist="createSimilarPlaylist"
-    />
-    <transition-group name="list" tag="section" class="track-container">
+    <ContainerIntro title="Top Tracks" @createPlaylist="createPlaylist"
+      @createSimilarPlaylist="createSimilarPlaylist" />
+
+    <LoadingIndicator v-if="loading" />
+    
+    <section class="track-container">
       <article v-for="track in topTracks" :key="track.id">
         <div>
           <a :href="track.href" class="link" target="_blank">
             <img :src="track.imageHref" class="image" :alt="track.name">
             <span class="meta-data title">{{track.name}}</span>
             <p>
-            <span 
-              v-for="artist in track.artists" 
-              :key="artist.id"
-              class="meta-data artists">
-              {{artist.name}}
-            </span>
+              <span v-for="artist in track.artists" :key="artist.id" class="meta-data artists">
+                {{artist.name}}
+              </span>
             </p>
           </a>
 
           <button @click="createSimilarTrackPlaylist" :id="track.id" :name="track.name">Create playlist</button>
         </div>
       </article>
-    </transition-group>
+    </section>
+
+    <PlaylistLink v-if="playlistLink" :playlistLink="playlistLink" />
   </section>
 </template>
 
 <script>
   import ContainerIntro from '@/components/ContainerIntro.vue'
+  import PlaylistLink from '@/components/PlaylistLink'
+
 
   export default {
     components: {
-      ContainerIntro
+      ContainerIntro,
+      PlaylistLink
     },
 
+
+    data() {
+      return {
+        playlistLink: ''
+      }
+    },
+
+
     computed: {
+			loading() {
+				return this.$store.state.loading
+      },
+      
       topTracks() {
         const tracks = this.$store.getters.topTracks
         return tracks
@@ -51,28 +65,47 @@
 			similarTracks: function(e) {
 				const data = e;
 				this.$store.dispatch('createSimilarPlaylist', data)
+      },
+      
+      playlistLink(value) {
+        
+				if(value) {
+					
+					setTimeout(() => {
+						this.playlistLink = ''
+					}, 4000);
+				}
 			}
 		},
 
     methods: {
       createPlaylist() {
-				console.log('create')
+				
         this.$store.dispatch('createTopPlaylist')
+        this.getPlaylistLink()
       },
 
       createSimilarPlaylist() {
-				console.log('createSimilarTracks')
-				this.$store.dispatch('fetchSimilarTracks')
+				
+        this.$store.dispatch('fetchSimilarTracks')
+        this.getPlaylistLink()
       },
 
-      createSimilarTrackPlaylist(e) {
+       createSimilarTrackPlaylist(e) {
         const track = {
           id: e.target.id,
           name: e.target.name
         }
         
         this.$store.dispatch('createSimilarTrackPlaylist', track)
-      }
+        this.getPlaylistLink()
+      },
+
+      async getPlaylistLink() {
+				const link = await this.$store.getters.getPlaylistLink
+				
+				this.playlistLink = link
+			}
     },
   }
 </script>
@@ -114,26 +147,5 @@
 			transform: scale(1.02);
 			}
     }
-  }
-
-  //Animation
-  .list {
-    transition: all 2s;
-  }
-
-  .list-item {
-    display: inline-block;
-    margin-right: 10px;
-  }
-
-  .list-enter-active,
-  .list-leave-active {
-    transition: all 1s;
-  }
-
-  .list-enter,
-  .list-leave-to .list-move {
-    opacity: 1;
-    transition: all 0.5s;
   }
 </style>

@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    loading: false,
     authorize: {
       clientId: 'e21503efb7af4d09930b523b044396e6',
       authorizeUrl: 'https://accounts.spotify.com/authorize?',
@@ -53,6 +54,14 @@ export default new Vuex.Store({
 
 
   mutations: {
+    updateLoading(state, payload) {
+      state.loading = payload
+    },
+
+    lol(state) {
+      state.createPlaylist.data = {}
+    },
+
     updateAccess(state, access) {
       state.access.accessToken = access.access_token
       state.access.tokenType = access.token_type
@@ -153,6 +162,7 @@ export default new Vuex.Store({
         return transformTopArtists
       }
     },
+
     //spotify:track:1uIPtWQmmoTJ8u0EVq7I8r
     getTrackUri(state) {
       const tracks = state.user.topTracks.items
@@ -166,6 +176,7 @@ export default new Vuex.Store({
         return trackUri
       }
     },
+
     getSimilarTrackUri(state) {
       const tracks = state.similarTracks.tracks
       let trackUri = []
@@ -176,11 +187,23 @@ export default new Vuex.Store({
         }
       }
       return trackUri
+    },
+
+    getPlaylistLink(state) {
+      return state.createPlaylist.data.external_urls.spotify
     }
   },
 
 
   actions: {
+    setLoading(context, status) {
+      context.commit('updateLoading', status)
+    },
+
+    resetPlaylist(context) {
+      context.commit('lol')
+    },
+
     fetchUser(context) {
       const url = context.state.user.userUrl
       const data = context.dispatch('fetchSpotify', url)
@@ -313,9 +336,7 @@ export default new Vuex.Store({
       context.dispatch('createPlaylist', data)
     },
 
-    createSimilarPlaylist(context, tracks) {
-      
-
+    async createSimilarPlaylist(context, tracks) {
       const date = new Date()
       const month = context.state.month[date.getMonth()] 
       const year = date.getFullYear()
@@ -329,7 +350,7 @@ export default new Vuex.Store({
         'tracks': tracks
       }
 
-      context.dispatch('createPlaylist', data)
+      return context.dispatch('createPlaylist', data)
     },
 
     createSimilarTrackPlaylist(context, {id, name}) {
@@ -401,6 +422,7 @@ export default new Vuex.Store({
     },
 
     async createSimilarArtistPlaylist(context) {
+      context.dispatch('setLoading', true)
       const similarTracks = await context.dispatch('fetchSimilarArtistTracks')
       const trackUri = similarTracks.map((i)=>i.uri)
       
@@ -414,10 +436,10 @@ export default new Vuex.Store({
         'tracks': trackUri
       }
 
-      context.dispatch('createPlaylist', data)
+      await context.dispatch('createPlaylist', data)
     },
 
-    createPlaylist(context, {metaData, tracks}) {
+    async createPlaylist(context, {metaData, tracks}) {
       const userId = context.state.user.data.id
       const  url= `https://api.spotify.com/v1/users/${userId}/playlists`
       
@@ -430,7 +452,7 @@ export default new Vuex.Store({
         body: JSON.stringify(metaData),
       }
 
-      fetch(url, option)
+      return fetch(url, option)
       .then(response=> {
         return response.json()
       })
@@ -444,14 +466,15 @@ export default new Vuex.Store({
           'playListId': id,
           'tracks': tracks
         }
-        context.dispatch('addSongToPlaylist', data)
+        return context.dispatch('addSongToPlaylist', data)
       })
       .catch(error=>{
-        
       })
+
+
     },
 
-    addSongToPlaylist({state, commit, dispatch,getters}, {playListId, tracks}) {
+    async addSongToPlaylist({state, commit, dispatch,getters}, {playListId, tracks}) {
       
       const userId = state.user.data.id
       // const playListId = state.playlist.data.id
@@ -467,15 +490,18 @@ export default new Vuex.Store({
         },
         body: JSON.stringify(track)
       }
-      fetch(url, options)
+      
+      return fetch(url, options)
       .then(response=> {
-        console.log('response: ', response);
-        response.json()
+        const status = response.status
+        if(status >= 200 && status < 300) {
+          dispatch('setLoading', false)
+          return playListId
+        }
       })
       .catch(error =>{
-        console.log(error)
+        
       })
-
     }
   }
 })

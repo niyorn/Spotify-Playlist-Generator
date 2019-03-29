@@ -5,8 +5,12 @@
       <p class="description">These are you {{title}} from the last 4 weeks</p>
     </section>
     <section class="container-create-playlist">
-      <button @click="$emit('createPlaylist')" class="button-create-playlist">Create playlist</button>
-      <button @click="$emit('createSimilarPlaylist')" class="button-create-playlist">Create similar style playlist</button>
+      <button @click="$emit('createPlaylist')" class="button-create-playlist">        <span>Create playlist</span>
+      </button>
+      <button @click="createSimilarPlaylist" class="button-create-playlist">
+        <span>{{playlistId}}</span>
+        <span>Create similar style playlist</span>
+      </button>
     </section>
   </section>
 </template>
@@ -17,8 +21,31 @@
 			title: {
 				type: String,
 				required: true
-			}
-		}
+      }
+    },
+
+    data() {
+      return {
+        playlistId: ''
+      }
+    },
+    
+    computed: {
+      loading() {
+        return this.$store.state.loading
+      },
+      test() {
+        const lol = this.$store.getters.getPlaylistId
+        
+        return lol
+      }
+    },
+
+    methods: {
+      createSimilarPlaylist(event) {
+        this.$emit('createSimilarPlaylist')
+      }
+    }
   }
 </script>
 

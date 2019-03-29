@@ -1,5 +1,5 @@
 <template>
-
+     <LoadingIndicator v-if="loading"/>
 </template>
 
 <script>
@@ -8,12 +8,17 @@
       getHash() {
         const hash = this.$route.hash
         return hash
+      },
+      loading() {
+        return this.$store.state.loading
       }
     },
 
 
     methods: {
-
+      setLoading(status) {
+        this.$store.dispatch('setLoading', status)
+      },
       transformHash(hash) {
         //Get access token from hash
         //source: source: https://github.com/spotify/web-api-auth-examples/blob/master/implicit_grant/public/index.html
@@ -37,7 +42,9 @@
 				await this.updateAccessToken()
 				await this.$store.dispatch('fetchUser')
 				await this.$store.dispatch('fetchUserTopTracks')
-				await this.$store.dispatch('fetchUserTopArtists')	
+        await this.$store.dispatch('fetchUserTopArtists')	
+        
+        return true
 			},
 
 			redirectView() {
@@ -46,9 +53,11 @@
     },
 
 
-    created() {
-			this.fetchUserData()
-			.then(this.redirectView)
+    async created() {
+      this.setLoading(true)
+      await this.fetchUserData()
+      this.setLoading(false)
+      this.redirectView()
     }
   }
 

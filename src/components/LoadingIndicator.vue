@@ -14,25 +14,29 @@
   .container-loader {
     display: flex;
     justify-content: center;
-    padding: 2rem;
-		position: fixed;
+		align-items: center;
+		position: absolute;
+		height: 100%;
+		width: 100%;
 		top: 0;
 		left: 0;
+		/* background-color: white; */
   }
 
   .loader {
     animation: loading 1s ease-in-out infinite alternate;
     background-color: #ffba64;
-    height: 6rem;
+    height: 70%;
+    max-height: 6rem;
     margin: 0 1rem;
     width: 1rem;
   }
 
-  .observer .loader:nth-of-type(2) {
+  .loader:nth-of-type(2) {
     animation-delay: .4s;
   }
 
-  .observer .loader:nth-of-type(3) {
+	.loader:nth-of-type(3) {
     animation-delay: .8s;
   }
 
