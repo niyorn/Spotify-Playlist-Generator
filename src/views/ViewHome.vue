@@ -8,6 +8,8 @@
         <router-link :to="{name:'Tracks'}" class="button">Top tracks</router-link>
         <router-link :to="{name:'Artists'}" class="button">Top Artists</router-link>
       </section>
+
+      <button @click="logOut" title="Log out" class="button button-logout">Log out</button>
     </aside>
 
     <transition name=content>
@@ -33,6 +35,11 @@
         if(!accessToken) {
           this.$router.push({name: 'Index'})
         }
+      },
+
+      logOut() {
+        this.$store.dispatch('logOut')
+        this.$router.push({name: 'Index'})
       }
     },
 
@@ -58,6 +65,8 @@
     background-color: #060625;
     height: 100vh;
     text-align: center;
+    display: flex;
+    flex-direction: column;
 
     .container-user {
       margin-top: 1.4rem;
@@ -72,17 +81,27 @@
       display: flex;
       flex-direction: column;
       margin-top: 2rem;
+    }
 
-      .button {
+    .button {
         padding: 2rem 0;
         position: relative;
         font-weight: bold;
         text-decoration: none;
         color: white;
+        background-color: transparent;
         transition: background-color 0.7s;
+        border: none;
+        cursor: pointer;
 
         &:hover {
           background-color: rgba(255, 255, 255, 0.178);
+        }
+
+        &.button-logout {
+          font-weight: bold;
+          font-size: 1.2rem;
+          margin-top: auto;
         }
 
         &.router-link-active {
@@ -111,7 +130,6 @@
         }
       }
     }
-  }
 
   .content {
     grid-area: content;

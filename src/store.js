@@ -82,6 +82,10 @@ export default new Vuex.Store({
 
     updateSimilarTracks(state, payload) {
       state.similarTracks = payload
+    },
+
+    resetAccessToken(state) {
+      state.access.accessToken = ''
     }
   },
 
@@ -186,7 +190,11 @@ export default new Vuex.Store({
     },
 
     getPlaylistLink(state) {
-      return state.createPlaylist.data.external_urls.spotify
+      const objectLength = Object.entries(state.createPlaylist.data).length
+
+      if(objectLength) {
+        return state.createPlaylist.data.external_urls.spotify
+      }
     }
   },
 
@@ -196,8 +204,8 @@ export default new Vuex.Store({
       context.commit('updateLoading', status)
     },
 
-    resetPlaylist(context) {
-      context.commit('lol')
+    logOut(context) {
+      context.commit('resetAccessToken')
     },
 
     fetchUser(context) {
