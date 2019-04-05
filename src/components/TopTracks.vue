@@ -67,10 +67,8 @@
 				this.$store.dispatch('createSimilarPlaylist', data)
       },
       
-      playlistLink(value) {
-        
-				if(value) {
-					
+      playlistLink(value) {     
+				if(value) {		
 					setTimeout(() => {
 						this.playlistLink = ''
 					}, 4000);

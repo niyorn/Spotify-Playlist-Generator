@@ -58,10 +58,6 @@ export default new Vuex.Store({
       state.loading = payload
     },
 
-    lol(state) {
-      state.createPlaylist.data = {}
-    },
-
     updateAccess(state, access) {
       state.access.accessToken = access.access_token
       state.access.tokenType = access.token_type
@@ -422,7 +418,6 @@ export default new Vuex.Store({
     },
 
     async createSimilarArtistPlaylist(context) {
-      context.dispatch('setLoading', true)
       const similarTracks = await context.dispatch('fetchSimilarArtistTracks')
       const trackUri = similarTracks.map((i)=>i.uri)
       
@@ -440,6 +435,7 @@ export default new Vuex.Store({
     },
 
     async createPlaylist(context, {metaData, tracks}) {
+      context.dispatch('setLoading', true)// add loading indicator
       const userId = context.state.user.data.id
       const  url= `https://api.spotify.com/v1/users/${userId}/playlists`
       
