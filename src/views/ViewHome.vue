@@ -24,6 +24,23 @@
       user() {
         return this.$store.getters.user
       }
+    },
+
+
+    methods: {
+      checkLoggedIn() { //check if there's any data else go to Home
+        const accessToken = this.$store.state.access.accessToken
+        if(!accessToken) {
+          this.$router.push({name: 'Index'})
+        }
+      }
+    },
+
+
+    created() { //check if there's any data else go to Home
+      this.$nextTick(()=> {
+        this.checkLoggedIn()
+      })
     }
   }
 
