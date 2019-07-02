@@ -98,7 +98,7 @@ export default new Vuex.Store({
       url += `&redirect_uri=${authorize.redirectUrl}`
       url += `&scope=${authorize.scope} ${authorize.scopePlayListModifyPublic}` 
       url += `&response_type=${authorize.responseType}`
-      // url += `&show_dialog=${authorize.showDialog}`
+      url += `&show_dialog=${authorize.showDialog}`
 
       return url
     },
