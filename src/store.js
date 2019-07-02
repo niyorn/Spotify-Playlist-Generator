@@ -330,7 +330,7 @@ export default new Vuex.Store({
 
       const metaData = {
         "name": `Top Tracks - ${month} ${year}`,
-        "description": "These are the top tracks that you've been listening to in the last 4 weeks.",
+        "description": "These are the top tracks that you have been listening to in the last 4 weeks.",
       }
       const tracks = context.getters.getTrackUri
       const data= {
