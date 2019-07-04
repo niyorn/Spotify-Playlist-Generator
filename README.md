@@ -1,5 +1,5 @@
-# Spotify-Playlist-Generator
-![Demo of week 1](./readme_assets/week1-demo.gif)
+# Sporator
+![Demo of Application](./readme_assets/demo.gif)
 
 ## Status
 Link to project: https://sporator.netlify.com/
