@@ -8,11 +8,11 @@
 
 <script>
 export default {
-  props: {
-    playlistLink: {
-      type: String
+    props: {
+        playlistLink: {
+            type: String
+        }
     }
-  }
 }
 </script>
 

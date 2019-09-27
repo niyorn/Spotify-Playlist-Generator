@@ -1,52 +1,52 @@
 <template>
-    <section class="container-home">
-        <aside class="menu">
-            <section class="container-user">
-                <h1 class="user-name">Hi, {{user.name}}</h1>
-            </section>
-            <section class="link-container">
-                <router-link :to="{name:'Tracks'}" class="button">Top tracks</router-link>
-                <router-link :to="{name:'Artists'}" class="button">Top Artists</router-link>
-            </section>
+  <section class="container-home">
+    <aside class="menu">
+      <section class="container-user">
+        <h1 class="user-name">Hi, {{user.name}}</h1>
+      </section>
+      <section class="link-container">
+        <router-link :to="{name:'Tracks'}" class="button">Top tracks</router-link>
+        <router-link :to="{name:'Artists'}" class="button">Top Artists</router-link>
+      </section>
 
-            <button @click="logOut" title="Log out" class="button button-logout">Log out</button>
-        </aside>
+      <button @click="logOut" title="Log out" class="button button-logout">Log out</button>
+    </aside>
 
-        <transition name="content">
-            <router-view class="content"></router-view>
-        </transition>
-    </section>
+    <transition name="content">
+      <router-view class="content"></router-view>
+    </transition>
+  </section>
 </template>
 
 <script>
 export default {
-	computed: {
-		user() {
-			return this.$store.getters.user
-		},
-	},
+    computed: {
+        user() {
+            return this.$store.getters.user
+        }
+    },
 
-	methods: {
-		checkLoggedIn() {
-			// check if there's any data else go to Home
-			const accessToken = this.$store.state.access.accessToken
-			if (!accessToken) {
-				this.$router.push({ name: 'Index' })
-			}
-		},
+    methods: {
+        checkLoggedIn() {
+            // check if there's any data else go to Home
+            const accessToken = this.$store.state.access.accessToken
+            if (!accessToken) {
+                this.$router.push({ name: 'Index' })
+            }
+        },
 
-		logOut() {
-			this.$store.dispatch('logOut')
-			this.$router.push({ name: 'Index' })
-		},
-	},
+        logOut() {
+            this.$store.dispatch('logOut')
+            this.$router.push({ name: 'Index' })
+        }
+    },
 
-	created() {
-		// check if there's any data else go to Home
-		this.$nextTick(() => {
-			this.checkLoggedIn()
-		})
-	},
+    created() {
+        // check if there's any data else go to Home
+        this.$nextTick(() => {
+            this.checkLoggedIn()
+        })
+    }
 }
 </script>
 

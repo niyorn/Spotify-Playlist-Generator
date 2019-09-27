@@ -42,6 +42,12 @@
                 "error",
                 4
             ],
+            "no-tabs": [
+                "error",
+                {
+                    "allowIndentationTabs": true
+                }
+            ],
             "space-before-function-paren": [
                 "error",
                 {

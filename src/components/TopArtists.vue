@@ -35,65 +35,65 @@ import ContainerIntro from '@/components/ContainerIntro'
 import PlaylistLink from '@/components/PlaylistLink'
 
 export default {
-  components: {
-    ContainerIntro,
-    PlaylistLink
-  },
-
-  data () {
-    return {
-      playlistLink: ''
-    }
-  },
-
-  computed: {
-    loading () {
-      return this.$store.state.loading
+    components: {
+        ContainerIntro,
+        PlaylistLink
     },
 
-    artists () {
-      const artists = this.$store.getters.topArtists
-      return artists
-    }
-  },
-
-  watch: {
-    playlistLink (value) {
-      if (value) {
-        setTimeout(() => {
-          this.playlistLink = ''
-        }, 4000)
-      }
-    }
-  },
-
-  methods: {
-    async createPlaylist () {
-      await this.$store.dispatch('createAllTopArtistPlaylist')
-      this.getPlaylistLink()
+    data() {
+        return {
+            playlistLink: ''
+        }
     },
 
-    async createSimilarPlaylist () {
-      this.$store.dispatch('createSimilarArtistPlaylist')
-      this.getPlaylistLink()
+    computed: {
+        loading() {
+            return this.$store.state.loading
+        },
+
+        artists() {
+            const artists = this.$store.getters.topArtists
+            return artists
+        }
     },
 
-    async createArtistPlaylist (event) {
-      const artist = {
-        id: event.target.dataset.artistId,
-        name: event.target.dataset.artistName
-      }
-
-      await this.$store.dispatch('createArtistTopTracksPlayList', artist)
-      this.getPlaylistLink()
+    watch: {
+        playlistLink(value) {
+            if (value) {
+                setTimeout(() => {
+                    this.playlistLink = ''
+                }, 4000)
+            }
+        }
     },
 
-    async getPlaylistLink () {
-      const link = await this.$store.getters.getPlaylistLink
+    methods: {
+        async createPlaylist() {
+            await this.$store.dispatch('createAllTopArtistPlaylist')
+            this.getPlaylistLink()
+        },
 
-      this.playlistLink = link
+        async createSimilarPlaylist() {
+            this.$store.dispatch('createSimilarArtistPlaylist')
+            this.getPlaylistLink()
+        },
+
+        async createArtistPlaylist(event) {
+            const artist = {
+                id: event.target.dataset.artistId,
+                name: event.target.dataset.artistName
+            }
+
+            await this.$store.dispatch('createArtistTopTracksPlayList', artist)
+            this.getPlaylistLink()
+        },
+
+        async getPlaylistLink() {
+            const link = await this.$store.getters.getPlaylistLink
+
+            this.playlistLink = link
+        }
     }
-  }
 }
 </script>
 
