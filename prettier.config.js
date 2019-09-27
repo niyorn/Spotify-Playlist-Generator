@@ -2,5 +2,6 @@ module.exports = {
     'trailingComma': 'none',
     'semi': false,
     'singleQuote': true,
-    'arrowParens': 'always'
+    'arrowParens': 'always',
+    'tabWidth': 4
 }

@@ -1,40 +1,40 @@
 <template>
-  <section class="container">
-    <ContainerIntro
-      title="Top Tracks"
-      @createPlaylist="createPlaylist"
-      @createSimilarPlaylist="createSimilarPlaylist"
-    />
+    <section class="container">
+        <ContainerIntro
+            title="Top Tracks"
+            @createPlaylist="createPlaylist"
+            @createSimilarPlaylist="createSimilarPlaylist"
+        />
 
-    <LoadingIndicator v-if="loading" />
+        <LoadingIndicator v-if="loading" />
 
-    <section class="track-container">
-      <article v-for="track in topTracks" :key="track.id">
-        <div>
-          <a :href="track.href" class="link" target="_blank">
-            <img :src="track.imageHref" class="image" :alt="track.name" />
-            <span class="meta-data title">{{track.name}}</span>
-            <p>
-              <span
-                v-for="artist in track.artists"
-                :key="artist.id"
-                class="meta-data artists"
-              >{{artist.name}}</span>
-            </p>
-          </a>
+        <section class="track-container">
+            <article v-for="track in topTracks" :key="track.id">
+                <div>
+                    <a :href="track.href" class="link" target="_blank">
+                        <img :src="track.imageHref" class="image" :alt="track.name" />
+                        <span class="meta-data title">{{track.name}}</span>
+                        <p>
+                            <span
+                                v-for="artist in track.artists"
+                                :key="artist.id"
+                                class="meta-data artists"
+                            >{{artist.name}}</span>
+                        </p>
+                    </a>
 
-          <button
-            @click="createSimilarTrackPlaylist"
-            :id="track.id"
-            :name="track.name"
-            class="button"
-          >Create playlist</button>
-        </div>
-      </article>
+                    <button
+                        @click="createSimilarTrackPlaylist"
+                        :id="track.id"
+                        :name="track.name"
+                        class="button"
+                    >Create playlist</button>
+                </div>
+            </article>
+        </section>
+
+        <PlaylistLink v-if="playlistLink" :playlistLink="playlistLink" />
     </section>
-
-    <PlaylistLink v-if="playlistLink" :playlistLink="playlistLink" />
-  </section>
 </template>
 
 <script>
