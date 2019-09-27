@@ -4,7 +4,7 @@
       @createSimilarPlaylist="createSimilarPlaylist" />
 
     <LoadingIndicator v-if="loading" />
-    
+
     <section class="track-container">
       <article v-for="track in topTracks" :key="track.id">
         <div>
@@ -28,84 +28,82 @@
 </template>
 
 <script>
-  import ContainerIntro from '@/components/ContainerIntro.vue'
-  import PlaylistLink from '@/components/PlaylistLink'
+import ContainerIntro from '@/components/ContainerIntro.vue'
+import PlaylistLink from '@/components/PlaylistLink'
 
 
-  export default {
-    components: {
-      ContainerIntro,
-      PlaylistLink
+export default {
+  components: {
+    ContainerIntro,
+    PlaylistLink
+  },
+
+
+  data () {
+    return {
+      playlistLink: ''
+    }
+  },
+
+
+  computed: {
+    loading () {
+      return this.$store.state.loading
     },
 
+    topTracks () {
+      const tracks = this.$store.getters.topTracks
+      return tracks
+    },
 
-    data() {
-      return {
-        playlistLink: ''
+    similarTracks: function () {
+      return this.$store.getters.getSimilarTrackUri
+    }
+  },
+
+  watch: {
+    similarTracks: function (e) {
+      const data = e
+      this.$store.dispatch('createSimilarPlaylist', data)
+    },
+
+    playlistLink (value) {
+      if (value) {
+        setTimeout(() => {
+          this.playlistLink = ''
+        }, 4000)
       }
+    }
+  },
+
+  methods: {
+    createPlaylist () {
+      this.$store.dispatch('createTopPlaylist')
+      this.getPlaylistLink()
     },
 
-
-    computed: {
-			loading() {
-				return this.$store.state.loading
-      },
-      
-      topTracks() {
-        const tracks = this.$store.getters.topTracks
-        return tracks
-			},
-			
-			similarTracks: function() {
-				return this.$store.getters.getSimilarTrackUri
-			}
-		},
-
-		watch: {
-			similarTracks: function(e) {
-				const data = e;
-				this.$store.dispatch('createSimilarPlaylist', data)
-      },
-      
-      playlistLink(value) {     
-				if(value) {		
-					setTimeout(() => {
-						this.playlistLink = ''
-					}, 4000);
-				}
-			}
-		},
-
-    methods: {
-      createPlaylist() {
-				
-        this.$store.dispatch('createTopPlaylist')
-        this.getPlaylistLink()
-      },
-
-      createSimilarPlaylist() {
-				
-        this.$store.dispatch('fetchSimilarTracks')
-        this.getPlaylistLink()
-      },
-
-       createSimilarTrackPlaylist(e) {
-        const track = {
-          id: e.target.id,
-          name: e.target.name
-        }
-        
-        this.$store.dispatch('createSimilarTrackPlaylist', track)
-        this.getPlaylistLink()
-      },
-
-      async getPlaylistLink() {
-				const link = await this.$store.getters.getPlaylistLink
-				
-				this.playlistLink = link
-			}
+    createSimilarPlaylist () {
+      this.$store.dispatch('fetchSimilarTracks')
+      this.getPlaylistLink()
     },
+
+    createSimilarTrackPlaylist (e) {
+      const track = {
+        id: e.target.id,
+        name: e.target.name
+      }
+
+      this.$store.dispatch('createSimilarTrackPlaylist', track)
+      this.getPlaylistLink()
+    },
+
+    async getPlaylistLink () {
+      const link = await this.$store.getters.getPlaylistLink
+
+      this.playlistLink = link
+    }
   }
+}
 </script>
 
 <style scoped lang="scss">

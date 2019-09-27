@@ -19,37 +19,37 @@
 </template>
 
 <script>
-  import TopTracks from '@/components/TopTracks'
+import TopTracks from '@/components/TopTracks'
 
-  export default {
-    computed: {
-      user() {
-        return this.$store.getters.user
-      }
-    },
-
-
-    methods: {
-      checkLoggedIn() { //check if there's any data else go to Home
-        const accessToken = this.$store.state.access.accessToken
-        if(!accessToken) {
-          this.$router.push({name: 'Index'})
-        }
-      },
-
-      logOut() {
-        this.$store.dispatch('logOut')
-        this.$router.push({name: 'Index'})
-      }
-    },
-
-
-    created() { //check if there's any data else go to Home
-      this.$nextTick(()=> {
-        this.checkLoggedIn()
-      })
+export default {
+  computed: {
+    user () {
+      return this.$store.getters.user
     }
+  },
+
+
+  methods: {
+    checkLoggedIn () { // check if there's any data else go to Home
+      const accessToken = this.$store.state.access.accessToken
+      if (!accessToken) {
+        this.$router.push({ name: 'Index' })
+      }
+    },
+
+    logOut () {
+      this.$store.dispatch('logOut')
+      this.$router.push({ name: 'Index' })
+    }
+  },
+
+
+  created () { // check if there's any data else go to Home
+    this.$nextTick(() => {
+      this.checkLoggedIn()
+    })
   }
+}
 
 </script>
 

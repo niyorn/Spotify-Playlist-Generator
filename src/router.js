@@ -19,19 +19,19 @@ export default new Router({
 
     {
       path: '/check',
-      name: "Check",
+      name: 'Check',
       component: Check
     },
 
     {
       path: '/home',
-      name: "Home",
+      name: 'Home',
       component: Home,
       children: [{
         path: 'tracks',
         name: 'Tracks',
         component: UserTracks
-      },{
+      }, {
         path: 'artists',
         name: 'Artists',
         component: UserArtists
