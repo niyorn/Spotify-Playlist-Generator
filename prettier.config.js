@@ -1,6 +1,6 @@
 module.exports = {
-  'trailingComma': 'all',
-  'semi': false,
-  'singleQuote': true,
-  'arrowParens': 'always'
+    'trailingComma': 'all',
+    'semi': false,
+    'singleQuote': true,
+    'arrowParens': 'always'
 }
