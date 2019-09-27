@@ -74,9 +74,7 @@ export default {
 		},
 
 		async createSimilarPlaylist() {
-			const test = await this.$store.dispatch(
-				'createSimilarArtistPlaylist',
-			)
+			this.$store.dispatch('createSimilarArtistPlaylist')
 			this.getPlaylistLink()
 		},
 

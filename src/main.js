@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -10,8 +11,6 @@ Vue.component('LoadingIndicator', LoadingIndicator)
 Vue.config.productionTip = false
 
 new Vue({
-  router,
-  store,
-  LoadingIndicator,
-  render: h => h(App)
+    // eslint-disable-next-line indent
+    router, store, LoadingIndicator, render: h => h(App)
 }).$mount('#app')
