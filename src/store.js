@@ -14,7 +14,7 @@ export default new Vuex.Store({
       scope: 'user-top-read',
       scopePlayListModifyPrivate: 'playlist-modify-private',
       scopePlayListModifyPublic: 'playlist-modify-public',
-      redirectUrl: 'https://sporator.netlify.com/check', // Change to: https://sporator.netlify.com/check if deployed
+      redirectUrl: 'http://localhost:8080/check', // Testing: http://localhost:8080/check or to: https://sporator.netlify.com/check if deployed
       showDialog: true
     },
     access: {
@@ -149,14 +149,21 @@ export default new Vuex.Store({
       const topArtists = state.user.topArtists.items
 
       if (topArtists !== undefined) {
-        console.log('topArtists: ', topArtists)
         let transformTopArtists = topArtists.map((i) => {
+          console.log(i);
+          const image = i.images
+          let imageUrl;
+          if (image.length > 0) {
+            imageUrl = image[0].url
+          }
+
           const artists = {
             name: i.name,
             href: i.external_urls.spotify,
-            imageHref: i.images[0].url,
+            imageHref: imageUrl,
             id: i.id
           }
+          console.log('artists: ', artists);
           return artists
         })
 
