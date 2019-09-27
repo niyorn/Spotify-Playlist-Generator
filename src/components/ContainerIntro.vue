@@ -18,35 +18,35 @@
 
 <script>
 export default {
-	props: {
-		title: {
-			type: String,
-			required: true,
-		},
-	},
+  props: {
+    title: {
+      type: String,
+      required: true
+    }
+  },
 
-	data() {
-		return {
-			playlistId: '',
-		}
-	},
+  data () {
+    return {
+      playlistId: ''
+    }
+  },
 
-	computed: {
-		loading() {
-			return this.$store.state.loading
-		},
-		test() {
-			const lol = this.$store.getters.getPlaylistId
+  computed: {
+    loading () {
+      return this.$store.state.loading
+    },
+    test () {
+      const lol = this.$store.getters.getPlaylistId
 
-			return lol
-		},
-	},
+      return lol
+    }
+  },
 
-	methods: {
-		createSimilarPlaylist(event) {
-			this.$emit('createSimilarPlaylist')
-		},
-	},
+  methods: {
+    createSimilarPlaylist (event) {
+      this.$emit('createSimilarPlaylist')
+    }
+  }
 }
 </script>
 

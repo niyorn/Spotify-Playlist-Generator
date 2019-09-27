@@ -6,11 +6,11 @@
 import { mapGetters } from 'vuex'
 
 export default {
-	computed: {
-		...mapGetters({
-			authorizeUrl: 'getAuthorizeUrl',
-		}),
-	},
+  computed: {
+    ...mapGetters({
+      authorizeUrl: 'getAuthorizeUrl'
+    })
+  }
 }
 </script>
 
