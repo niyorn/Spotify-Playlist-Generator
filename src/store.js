@@ -150,7 +150,6 @@ export default new Vuex.Store({
 
             if (topArtists !== undefined) {
                 let transformTopArtists = topArtists.map((i) => {
-                    console.log(i)
                     const image = i.images
                     let imageUrl
                     if (image.length > 0) {
@@ -224,10 +223,10 @@ export default new Vuex.Store({
 
         fetchUserTopTracks(context) {
             const url = context.state.user.userUrl +
-				context.state.user.scopeTopTracks +
-				`time_range=${context.state.user.timeRange}` +
-				`&` +
-				`limit=${context.state.user.trackRange}`
+                context.state.user.scopeTopTracks +
+                `time_range=${context.state.user.timeRange}` +
+                `&` +
+                `limit=${context.state.user.trackRange}`
             const data = context.dispatch('fetchSpotify', url)
             data.then(data => {
                 context.commit('updateUserTracks', data)
@@ -236,10 +235,10 @@ export default new Vuex.Store({
 
         fetchUserTopArtists(context) {
             const url = context.state.user.userUrl +
-				context.state.user.scopeTopArtists +
-				`time_range=${context.state.user.timeRange}` +
-				`&` +
-				`limit=${context.state.user.trackRange}`
+                context.state.user.scopeTopArtists +
+                `time_range=${context.state.user.timeRange}` +
+                `&` +
+                `limit=${context.state.user.trackRange}`
             const data = context.dispatch('fetchSpotify', url)
             data.then(data => {
                 context.commit('updateUserArtists', data)
@@ -491,9 +490,6 @@ export default new Vuex.Store({
                     }
                     return context.dispatch('addSongToPlaylist', data)
                 })
-                .catch(error => {
-                    console.log(error)
-                })
         },
 
         async addSongToPlaylist({
@@ -528,9 +524,6 @@ export default new Vuex.Store({
                         dispatch('setLoading', false)
                         return playListId
                     }
-                })
-                .catch(error => {
-                    console.log(error)
                 })
         }
     }
