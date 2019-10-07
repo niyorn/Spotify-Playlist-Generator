@@ -8,12 +8,12 @@
 import './ButtonStyle.scss'
 
 export default {
-	name: 'Button',
-	methods: {
-		click() {
-			this.$emit('clicked')
-		}
-	}
+    name: 'Button',
+    methods: {
+        click() {
+            this.$emit('clicked')
+        }
+    }
 }
 </script>
 

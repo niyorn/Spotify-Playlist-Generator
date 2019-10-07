@@ -18,27 +18,27 @@
 import Button from '@/components/atom/button/Button'
 
 export default {
-	components: {
-		Button
-	},
-	props: {
-		title: {
-			type: String,
-			required: true
-		}
-	},
+    components: {
+        Button
+    },
+    props: {
+        title: {
+            type: String,
+            required: true
+        }
+    },
 
-	computed: {
-		loading() {
-			return this.$store.state.loading
-		}
-	},
+    computed: {
+        loading() {
+            return this.$store.state.loading
+        }
+    },
 
-	methods: {
-		createSimilarPlaylist(event) {
-			this.$emit('createSimilarPlaylist')
-		}
-	}
+    methods: {
+        createSimilarPlaylist(event) {
+            this.$emit('createSimilarPlaylist')
+        }
+    }
 }
 </script>
 

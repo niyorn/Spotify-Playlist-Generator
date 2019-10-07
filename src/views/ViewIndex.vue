@@ -22,19 +22,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Button from '@/components/atom/button/Button'
 import ButtonLink from '@/components/atom/button/ButtonLink'
 
 export default {
-	components: {
-		Button,
-		ButtonLink
-	},
-	computed: {
-		...mapGetters({
-			authorizeUrl: 'getAuthorizeUrl'
-		})
-	}
+    components: {
+        ButtonLink
+    },
+    computed: {
+        ...mapGetters({
+            authorizeUrl: 'getAuthorizeUrl'
+        })
+    }
 }
 </script>
 

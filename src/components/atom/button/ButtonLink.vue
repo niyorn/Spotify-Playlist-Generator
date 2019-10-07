@@ -8,12 +8,12 @@
 import './ButtonStyle.scss'
 
 export default {
-	name: 'ButtonLink',
-	props: {
-		href: {
-			type: String
-		}
-	}
+    name: 'ButtonLink',
+    props: {
+        href: {
+            type: String
+        }
+    }
 }
 </script>
 
