@@ -52,7 +52,6 @@ export default new Vuex.Store({
         ]
     },
 
-
     mutations: {
         updateLoading(state, payload) {
             state.loading = payload
@@ -88,7 +87,6 @@ export default new Vuex.Store({
             state.access.accessToken = ''
         }
     },
-
 
     getters: {
         getAuthorizeUrl(state) {
@@ -202,7 +200,6 @@ export default new Vuex.Store({
             }
         }
     },
-
 
     actions: {
         setLoading(context, status) {
@@ -426,7 +423,6 @@ export default new Vuex.Store({
                 const topTrack = tracks.tracks[0]
                 topArtistTracks.push(topTrack)
             }
-
 
             const trackUri = await topArtistTracks.map((i) => {
                 return i.uri
