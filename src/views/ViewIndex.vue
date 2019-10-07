@@ -1,34 +1,40 @@
 <template>
-  <section class="headline-container">
-    <section class="play-container">
-      <div class="album-container">
-        <img class="album-cover" src="@/assets/trapart-cover.jpg" alt />
+    <section class="headline-container">
+        <section class="play-container">
+            <div class="album-container">
+                <img class="album-cover" src="@/assets/trapart-cover.jpg" alt />
 
-        <div class="decoration"></div>
-      </div>
-      <div class="decoration"></div>
+                <div class="decoration"></div>
+            </div>
+            <div class="decoration"></div>
+        </section>
+        <main class="jumbo-tron-container">
+            <h1 class="title">Sporator</h1>
+            <p class="under-title">Spotify playlist generator</p>
+            <p class="description">
+                Sporator will generate a playlist from your most listened songs, instead of you wasting
+                your time selecting the songs on your own. So start listen to your favorite songs now.
+            </p>
+            <ButtonLink :href="authorizeUrl">Generate playlist</ButtonLink>
+        </main>
     </section>
-    <main class="jumbo-tron-container">
-      <h1 class="title">Sporator</h1>
-      <p class="under-title">Spotify playlist generator</p>
-      <p class="description">
-        Sporator will generate a playlist from your most listened songs, instead of you wasting
-        your time selecting the songs on your own. So start listen to your favorite songs now.
-      </p>
-      <a class="login" :href="authorizeUrl">Generate playlist</a>
-    </main>
-  </section>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import Button from '@/components/atom/button/Button'
+import ButtonLink from '@/components/atom/button/ButtonLink'
 
 export default {
-    computed: {
-        ...mapGetters({
-            authorizeUrl: 'getAuthorizeUrl'
-        })
-    }
+	components: {
+		Button,
+		ButtonLink
+	},
+	computed: {
+		...mapGetters({
+			authorizeUrl: 'getAuthorizeUrl'
+		})
+	}
 }
 </script>
 
