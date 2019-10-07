@@ -3,7 +3,7 @@
 	margin-top: 4rem;
 	padding: 1rem 2rem 1rem 2rem;
 
-    font-size: calc(16 * 0.12vw);
+    font-size: calc(16px + 0.2vw);
     background-color: blue;
 	background-color: var(--secondary-color);
 	color: black;
@@ -15,5 +15,9 @@
 
 	&:hover {
 		box-shadow: var(--box-shadow-hover);
+	}
+
+	@media screen and (min-width: 1900px){
+		font-size: 1.2em;
 	}
 }

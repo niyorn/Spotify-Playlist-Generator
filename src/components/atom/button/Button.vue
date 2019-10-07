@@ -11,7 +11,7 @@ export default {
 	name: 'Button',
 	methods: {
 		click() {
-			this.$emit('click')
+			this.$emit('clicked')
 		}
 	}
 }

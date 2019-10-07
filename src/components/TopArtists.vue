@@ -35,65 +35,65 @@ import ContainerIntro from '@/components/ContainerIntro'
 import PlaylistLink from '@/components/PlaylistLink'
 
 export default {
-    components: {
-        ContainerIntro,
-        PlaylistLink
-    },
+	components: {
+		ContainerIntro,
+		PlaylistLink
+	},
 
-    data() {
-        return {
-            playlistLink: ''
-        }
-    },
+	data() {
+		return {
+			playlistLink: ''
+		}
+	},
 
-    computed: {
-        loading() {
-            return this.$store.state.loading
-        },
+	computed: {
+		loading() {
+			return this.$store.state.loading
+		},
 
-        artists() {
-            const artists = this.$store.getters.topArtists
-            return artists
-        }
-    },
+		artists() {
+			const artists = this.$store.getters.topArtists
+			return artists
+		}
+	},
 
-    watch: {
-        playlistLink(value) {
-            if (value) {
-                setTimeout(() => {
-                    this.playlistLink = ''
-                }, 4000)
-            }
-        }
-    },
+	watch: {
+		playlistLink(value) {
+			if (value) {
+				setTimeout(() => {
+					this.playlistLink = ''
+				}, 4000)
+			}
+		}
+	},
 
-    methods: {
-        async createPlaylist() {
-            await this.$store.dispatch('createAllTopArtistPlaylist')
-            this.getPlaylistLink()
-        },
+	methods: {
+		async createPlaylist() {
+			await this.$store.dispatch('createAllTopArtistPlaylist')
+			this.getPlaylistLink()
+		},
 
-        async createSimilarPlaylist() {
-            this.$store.dispatch('createSimilarArtistPlaylist')
-            this.getPlaylistLink()
-        },
+		async createSimilarPlaylist() {
+			this.$store.dispatch('createSimilarArtistPlaylist')
+			this.getPlaylistLink()
+		},
 
-        async createArtistPlaylist(event) {
-            const artist = {
-                id: event.target.dataset.artistId,
-                name: event.target.dataset.artistName
-            }
+		async createArtistPlaylist(event) {
+			const artist = {
+				id: event.target.dataset.artistId,
+				name: event.target.dataset.artistName
+			}
 
-            await this.$store.dispatch('createArtistTopTracksPlayList', artist)
-            this.getPlaylistLink()
-        },
+			await this.$store.dispatch('createArtistTopTracksPlayList', artist)
+			this.getPlaylistLink()
+		},
 
-        async getPlaylistLink() {
-            const link = await this.$store.getters.getPlaylistLink
+		async getPlaylistLink() {
+			const link = await this.$store.getters.getPlaylistLink
 
-            this.playlistLink = link
-        }
-    }
+			this.playlistLink = link
+		}
+	}
 }
 </script>
 
@@ -105,6 +105,7 @@ export default {
 	grid-column-gap: 4rem;
 	grid-row-gap: 5rem;
 	padding: 1.7rem;
+	margin-top: 1rem;
 
 	div {
 		display: flex;

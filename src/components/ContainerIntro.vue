@@ -5,48 +5,40 @@
             <p class="description">These are you {{title}} from the last 4 weeks</p>
         </section>
         <section class="container-create-playlist">
-            <button @click="$emit('createPlaylist')" class="button-create-playlist">
-                <span>Create playlist</span>
-            </button>
-            <button @click="createSimilarPlaylist" class="button-create-playlist">
-                <span>{{playlistId}}</span>
-                <span>Create similar style playlist</span>
-            </button>
+            <Button @clicked="$emit('createPlaylist')" class="button">Create playlist</Button>
+            <Button
+                @clicked="$emit('createSimilarPlaylist')"
+                class="button"
+            >Create similar style playlist</Button>
         </section>
     </section>
 </template>
 
 <script>
+import Button from '@/components/atom/button/Button'
+
 export default {
-    props: {
-        title: {
-            type: String,
-            required: true
-        }
-    },
+	components: {
+		Button
+	},
+	props: {
+		title: {
+			type: String,
+			required: true
+		}
+	},
 
-    data() {
-        return {
-            playlistId: ''
-        }
-    },
+	computed: {
+		loading() {
+			return this.$store.state.loading
+		}
+	},
 
-    computed: {
-        loading() {
-            return this.$store.state.loading
-        },
-        test() {
-            const lol = this.$store.getters.getPlaylistId
-
-            return lol
-        }
-    },
-
-    methods: {
-        createSimilarPlaylist(event) {
-            this.$emit('createSimilarPlaylist')
-        }
-    }
+	methods: {
+		createSimilarPlaylist(event) {
+			this.$emit('createSimilarPlaylist')
+		}
+	}
 }
 </script>
 
@@ -66,20 +58,8 @@ export default {
 	.container-create-playlist {
 		padding: 1rem 0;
 
-		.button-create-playlist {
-			padding: 1rem;
-			margin: 0 1rem;
-			margin-left: 0;
-			background-color: #88fff5;
-			border: solid #88fff5 0.1rem;
-			transition: all 0.4s ease-out;
-
-			&:hover,
-			&:focus {
-				cursor: pointer;
-				box-shadow: 0 19px 38px rgba(0, 0, 0, 0.2),
-					0 15px 12px rgba(0, 0, 0, 0.1);
-			}
+		.button {
+			margin: 0 2rem 0 0;
 		}
 	}
 }

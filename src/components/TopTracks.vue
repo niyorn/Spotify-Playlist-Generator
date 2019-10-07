@@ -23,12 +23,11 @@
                         </p>
                     </a>
 
-                    <button
-                        @click="createSimilarTrackPlaylist"
+                    <Button
+                        @clicked="createSimilarTrackPlaylist({trackId: track.id, name: track.name})"
                         :id="track.id"
                         :name="track.name"
-                        class="button"
-                    >Create playlist</button>
+                    >Create Playlist</Button>
                 </div>
             </article>
         </section>
@@ -40,76 +39,78 @@
 <script>
 import ContainerIntro from '@/components/ContainerIntro.vue'
 import PlaylistLink from '@/components/PlaylistLink'
+import Button from '@/components/atom/button/Button'
 
 export default {
-    components: {
-        ContainerIntro,
-        PlaylistLink
-    },
+	components: {
+		ContainerIntro,
+		PlaylistLink,
+		Button
+	},
 
-    data() {
-        return {
-            playlistLink: ''
-        }
-    },
+	data() {
+		return {
+			playlistLink: ''
+		}
+	},
 
-    computed: {
-        loading() {
-            return this.$store.state.loading
-        },
+	computed: {
+		loading() {
+			return this.$store.state.loading
+		},
 
-        topTracks() {
-            const tracks = this.$store.getters.topTracks
-            return tracks
-        },
+		topTracks() {
+			const tracks = this.$store.getters.topTracks
+			return tracks
+		},
 
-        similarTracks: function() {
-            return this.$store.getters.getSimilarTrackUri
-        }
-    },
+		similarTracks: function() {
+			return this.$store.getters.getSimilarTrackUri
+		}
+	},
 
-    watch: {
-        similarTracks: function(e) {
-            const data = e
-            this.$store.dispatch('createSimilarPlaylist', data)
-        },
+	watch: {
+		similarTracks: function(e) {
+			const data = e
+			this.$store.dispatch('createSimilarPlaylist', data)
+		},
 
-        playlistLink(value) {
-            if (value) {
-                setTimeout(() => {
-                    this.playlistLink = ''
-                }, 4000)
-            }
-        }
-    },
+		playlistLink(value) {
+			if (value) {
+				setTimeout(() => {
+					this.playlistLink = ''
+				}, 4000)
+			}
+		}
+	},
 
-    methods: {
-        createPlaylist() {
-            this.$store.dispatch('createTopPlaylist')
-            this.getPlaylistLink()
-        },
+	methods: {
+		createPlaylist() {
+			this.$store.dispatch('createTopPlaylist')
+			this.getPlaylistLink()
+		},
 
-        createSimilarPlaylist() {
-            this.$store.dispatch('fetchSimilarTracks')
-            this.getPlaylistLink()
-        },
+		createSimilarPlaylist() {
+			this.$store.dispatch('fetchSimilarTracks')
+			this.getPlaylistLink()
+		},
 
-        createSimilarTrackPlaylist(e) {
-            const track = {
-                id: e.target.id,
-                name: e.target.name
-            }
+		createSimilarTrackPlaylist({ trackId, name }) {
+			const track = {
+				id: trackId,
+				name: name
+			}
 
-            this.$store.dispatch('createSimilarTrackPlaylist', track)
-            this.getPlaylistLink()
-        },
+			this.$store.dispatch('createSimilarTrackPlaylist', track)
+			this.getPlaylistLink()
+		},
 
-        async getPlaylistLink() {
-            const link = await this.$store.getters.getPlaylistLink
+		async getPlaylistLink() {
+			const link = await this.$store.getters.getPlaylistLink
 
-            this.playlistLink = link
-        }
-    }
+			this.playlistLink = link
+		}
+	}
 }
 </script>
 
@@ -120,6 +121,7 @@ export default {
 	grid-column-gap: 4rem;
 	grid-row-gap: 5rem;
 	padding: 1.7rem;
+	margin-top: 1rem;
 
 	.link {
 		display: flex;
