@@ -12,37 +12,13 @@
     </div>
 </template>
 
-
 <script>
+import '@/assets/GlobalStyle.scss'
+
 export default {}
 </script>
 
-
 <style lang="scss">
-:root {
-	--primary-color: #060625;
-	--secondary-color: #88fff5;
-
-	--box-shadow-hover: 0 19px 38px rgba(0, 0, 0, 0.2),
-		0 15px 12px rgba(0, 0, 0, 0.1);
-}
-
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-html,
-body,
-#app {
-	height: 100%;
-}
-
-body {
-	font-family: 'Ubuntu', sans-serif;
-}
-
 .author {
 	position: fixed;
 	bottom: 1rem;
