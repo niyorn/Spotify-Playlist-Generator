@@ -318,12 +318,16 @@ export default new Vuex.Store({
             return data
         },
 
-        getAccess({ state }) {
+        getAccess({
+            state
+        }) {
             const authorize = state.authorize
             return authorize
         },
 
-        addAccess({ commit }, access) {
+        addAccess({
+            commit
+        }, access) {
             commit('updateAccess', access)
         },
 
