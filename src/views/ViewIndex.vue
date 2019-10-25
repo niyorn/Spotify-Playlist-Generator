@@ -60,6 +60,7 @@ export default {
             .album-cover {
                 width: 60%;
                 border-radius: 50%;
+                background-color: var(--secondary-color);
                 animation: spinning 40s infinite linear;
                 box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2),
                     0 15px 40px rgba(0, 0, 0, 0.1);
