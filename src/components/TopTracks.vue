@@ -136,6 +136,7 @@ export default {
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2),
                 0 27px 27px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
+            background-color: rgb(245, 245, 245);
             transition: transform 0.2s ease-out;
         }
 

@@ -131,7 +131,7 @@ export default {
             border-radius: 10px;
             transition: transform 0.2s ease-out;
             border-radius: 50%;
-            background-color: white;
+            background-color: rgb(245, 245, 245);
             overflow: hidden;
         }
 
