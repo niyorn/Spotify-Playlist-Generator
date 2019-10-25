@@ -12,7 +12,7 @@
             <button @click="logOut" title="Log out" class="button button-logout">Log out</button>
         </aside>
 
-        <transition name="content">
+        <transition name="content" mode="out-in" appear>
             <router-view class="content"></router-view>
         </transition>
     </section>
@@ -135,10 +135,17 @@ export default {
     position: relative;
 }
 
-.content-enter-active {
-    transition: opacity 0.4s ease-out;
+.content-enter-active,
+.content-leave-active {
+    transition: all 0.4s ease-out;
 }
 .content-enter {
-    opacity: 0.7;
+    opacity: 0.1;
+    transform: translateY(3rem);
+}
+
+.content-leave-to {
+    opacity: 0;
+    transform: translateY(-7rem);
 }
 </style>
