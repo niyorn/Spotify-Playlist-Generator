@@ -44,23 +44,23 @@ export default {
 
 <style scoped lang="scss">
 .container-intro {
-	text-align: left;
-	padding-left: 2rem;
+    text-align: left;
+    padding-left: 2rem;
 
-	.title {
-		font-size: 6rem;
-	}
+    .title {
+        font-size: 6rem;
+    }
 
-	.description {
-		font-size: 2rem;
-	}
+    .description {
+        font-size: 2rem;
+    }
 
-	.container-create-playlist {
-		padding: 1rem 0;
+    .container-create-playlist {
+        padding: 1rem 0;
 
-		.button {
-			margin: 0 2rem 0 0;
-		}
-	}
+        .button {
+            margin: 0 2rem 0 0;
+        }
+    }
 }
 </style>
