@@ -54,28 +54,22 @@ export default {
         artists() {
             const artists = this.$store.getters.topArtists
             return artists
-        }
+    },
+        testLink() {
+            let link = this.$store.getters.getPlaylistLink
+            return link
+            }
     },
 
-    watch: {
-        playlistLink(value) {
-            if (value) {
-                setTimeout(() => {
-                    this.playlistLink = ''
-                }, 4000)
-            }
-        }
-    },
+    watch: {},
 
     methods: {
         async createPlaylist() {
             await this.$store.dispatch('createAllTopArtistPlaylist')
-            this.getPlaylistLink()
         },
 
         async createSimilarPlaylist() {
             this.$store.dispatch('createSimilarArtistPlaylist')
-            this.getPlaylistLink()
         },
 
         async createArtistPlaylist(event) {
@@ -85,12 +79,6 @@ export default {
             }
 
             await this.$store.dispatch('createArtistTopTracksPlayList', artist)
-            this.getPlaylistLink()
-        },
-
-        async getPlaylistLink() {
-            const link = await this.$store.getters.getPlaylistLink
-            this.playlistLink = link
         }
     }
 }

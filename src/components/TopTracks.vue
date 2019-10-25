@@ -49,23 +49,23 @@ export default {
     },
 
     data() {
-        return {
-            playlistLink: ''
-        }
+        return {}
     },
 
     computed: {
         loading() {
             return this.$store.state.loading
         },
-
         topTracks() {
             const tracks = this.$store.getters.topTracks
             return tracks
         },
-
         similarTracks: function() {
             return this.$store.getters.getSimilarTrackUri
+        },
+        playlistLink() {
+            let link = this.$store.getters.getPlaylistLink
+            return link
         }
     },
 
@@ -73,26 +73,16 @@ export default {
         similarTracks: function(e) {
             const data = e
             this.$store.dispatch('createSimilarPlaylist', data)
-        },
-
-        playlistLink(value) {
-            if (value) {
-                setTimeout(() => {
-                    this.playlistLink = ''
-                }, 4000)
-            }
         }
     },
 
     methods: {
         createPlaylist() {
             this.$store.dispatch('createTopPlaylist')
-            this.getPlaylistLink()
         },
 
         createSimilarPlaylist() {
             this.$store.dispatch('fetchSimilarTracks')
-            this.getPlaylistLink()
         },
 
         createSimilarTrackPlaylist({ trackId, name }) {
@@ -102,13 +92,6 @@ export default {
             }
 
             this.$store.dispatch('createSimilarTrackPlaylist', track)
-            this.getPlaylistLink()
-        },
-
-        async getPlaylistLink() {
-            const link = await this.$store.getters.getPlaylistLink
-
-            this.playlistLink = link
         }
     }
 }
