@@ -41,9 +41,7 @@ export default {
     },
 
     data() {
-        return {
-            playlistLink: ''
-        }
+        return {}
     },
 
     computed: {
