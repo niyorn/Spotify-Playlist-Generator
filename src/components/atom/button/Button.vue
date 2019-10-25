@@ -5,8 +5,6 @@
 </template>
 
 <script>
-import './ButtonStyle.scss'
-
 export default {
     name: 'Button',
     methods: {
@@ -17,5 +15,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
+@import './ButtonStyle.scss';
 </style>
