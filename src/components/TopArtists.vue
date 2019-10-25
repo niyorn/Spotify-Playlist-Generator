@@ -54,11 +54,11 @@ export default {
         artists() {
             const artists = this.$store.getters.topArtists
             return artists
-    },
-        testLink() {
+        },
+        playlistLink() {
             let link = this.$store.getters.getPlaylistLink
             return link
-            }
+        }
     },
 
     watch: {},
