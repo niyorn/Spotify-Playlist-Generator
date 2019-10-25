@@ -99,7 +99,7 @@ export default {
 <style scoped lang="scss">
 .container-top-artist {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
     grid-column-gap: 4rem;
     grid-row-gap: 5rem;
     padding: 1.7rem;
