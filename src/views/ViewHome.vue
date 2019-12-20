@@ -55,6 +55,7 @@ export default {
     display: grid;
     grid-template-areas: 'menu content';
     grid-template-columns: 14rem 1fr;
+    overflow: hidden;
 }
 
 .menu {
